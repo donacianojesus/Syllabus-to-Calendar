@@ -4,11 +4,11 @@
 
 This project aims to transform a law student's syllabus into a clean, organized calendar displaying assignments, readings, and exams. Designed for clarity, usability, and deployment-ready code, it will help students manage their academic schedules efficiently.
 
-## 🎯 Overview
+## Overview
 
 LawBandit Calendar is a web application that automatically parses law school syllabi and converts them into an interactive calendar. Simply upload your syllabus (PDF or text format), and the app will extract all important dates, assignments, and exams, presenting them in an easy-to-use calendar interface.
 
-## ✨ Features 
+## Features 
 
 ### Core Functionality
 - **Syllabus Input:** Upload a PDF or text syllabus and parse it to extract:
@@ -29,7 +29,7 @@ LawBandit Calendar is a web application that automatically parses law school syl
 - **Frontend:** React with modern UI components
 - **Deployment:** Vercel-ready with seamless frontend/backend integration
 
-## 🚀 Stretch Goals
+## Stretch Goals
 
 - **Google Calendar Integration:** Sync events directly to your Google Calendar
 - **Color-coded Events:** Visual distinction by event type (assignment, exam, reading)
@@ -38,7 +38,7 @@ LawBandit Calendar is a web application that automatically parses law school syl
 - **Multiple Syllabus Support:** Handle multiple courses simultaneously
 - **Notification System:** Email or browser notifications for upcoming deadlines
 
-## 🛠️ Installation & Setup
+## Installation & Setup
 
 ### Prerequisites
 - Node.js (v16 or higher)
@@ -113,7 +113,7 @@ lawbandit-calendar/
 └── tests/                # Test files
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 
@@ -133,17 +133,13 @@ GOOGLE_CALENDAR_CLIENT_ID=your_client_id
 GOOGLE_CALENDAR_CLIENT_SECRET=your_client_secret
 ```
 
-## 📝 Usage
+## Usage
 
 1. **Upload Syllabus:** Drag and drop or select a PDF/text file containing your course syllabus
 2. **Review Parsed Events:** The app will automatically extract and display all important dates
 3. **View Calendar:** Browse your schedule in the monthly calendar view
 4. **Manage Events:** Click on events to view details or make manual adjustments
 5. **Export (Future):** Sync with Google Calendar or export to other formats
-
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
 ### Development Workflow
 1. Fork the repository
@@ -152,21 +148,7 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 4. Push to the branch: `git push origin feature/amazing-feature`
 5. Open a Pull Request
 
-## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-- **Issues:** Report bugs or request features via [GitHub Issues](https://github.com/yourusername/lawbandit-calendar/issues)
-- **Discussions:** Join community discussions in [GitHub Discussions](https://github.com/yourusername/lawbandit-calendar/discussions)
-- **Email:** Contact us at support@lawbandit.com
-
-## 🙏 Acknowledgments
-
-- Built for law students, by developers who understand the academic struggle
-- Inspired by the need for better academic schedule management
-- Special thanks to the open-source community for the amazing tools and libraries
 
 ---
 
