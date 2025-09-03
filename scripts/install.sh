@@ -20,17 +20,17 @@ fi
 echo "Node.js version: $(node -v)"
 
 # Install root dependencies
-echo "📦 Installing root dependencies..."
+echo "Installing root dependencies..."
 npm install
 
 # Install backend dependencies
-echo "📦 Installing backend dependencies..."
+echo "Installing backend dependencies..."
 cd src/backend
 npm install
 cd ../..
 
 # Install frontend dependencies
-echo "📦 Installing frontend dependencies..."
+echo "Installing frontend dependencies..."
 cd src/frontend
 npm install
 cd ../..
