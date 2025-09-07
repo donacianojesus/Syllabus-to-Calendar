@@ -6,7 +6,7 @@ import { CalendarEvent, EventType, Priority } from './types';
  * Format a date for display in the calendar
  */
 export const formatDate = (date: Date, format: 'short' | 'long' | 'time' = 'short'): string => {
-  const options: Intl.DateTimeFormatOptions = {
+  const options: Record<string, Intl.DateTimeFormatOptions> = {
     short: { month: 'short', day: 'numeric' },
     long: { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' },
     time: { hour: 'numeric', minute: '2-digit', hour12: true }

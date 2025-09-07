@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import uploadRouter from './routes/upload';
 
 // Load environment variables
 dotenv.config();
@@ -27,6 +28,8 @@ app.get('/health', (req, res) => {
 });
 
 // API routes
+app.use('/api/upload', uploadRouter);
+
 app.get('/api', (req, res) => {
   res.json({ 
     message: 'LawBandit Calendar API',
@@ -34,6 +37,7 @@ app.get('/api', (req, res) => {
     endpoints: {
       health: '/health',
       upload: '/api/upload (POST)',
+      uploadInfo: '/api/upload/info (GET)',
       events: '/api/events (GET, POST, PUT, DELETE)'
     }
   });
