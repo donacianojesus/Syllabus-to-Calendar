@@ -28,13 +28,13 @@ LawBandit Calendar is a web application that automatically parses law school syl
 - **Error Handling:** Comprehensive validation and error responses
 - **File Validation:** Type checking and size limits (10MB max)
 
-### 🚧 **In Development (Next Phase)**
+### **In Development (Next Phase)**
 - **File Upload UI:** Drag-and-drop interface for syllabus upload
 - **Calendar Display:** Monthly calendar view showing parsed events
 - **Event Management:** View, edit, and manage calendar events
 - **Frontend Integration:** Connect React frontend to backend API
 
-### 🔮 **Planned Features**
+### **Planned Features**
 - **Google Calendar Integration:** Sync events directly to Google Calendar
 - **Multiple Syllabus Support:** Handle multiple courses simultaneously
 - **Export Options:** Download calendar as PDF or export to other formats
@@ -192,7 +192,7 @@ const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch
 async function testUpload() {
   const pdfFiles = fs.readdirSync('.').filter(f => f.endsWith('.pdf'));
   if (pdfFiles.length === 0) {
-    console.log('❌ No PDF files found. Place a PDF in the project root.');
+    console.log('No PDF files found. Place a PDF in the project root.');
     return;
   }
   
@@ -206,8 +206,8 @@ async function testUpload() {
   });
   
   const result = await response.json();
-  console.log('✅ Success! Events found:', result.data?.events?.length || 0);
-  console.log('🎯 Confidence:', result.metadata?.confidence + '%');
+  console.log('Success! Events found:', result.data?.events?.length || 0);
+  console.log('Confidence:', result.metadata?.confidence + '%');
 }
 
 testUpload();
