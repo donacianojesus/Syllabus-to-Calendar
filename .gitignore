@@ -91,3 +91,11 @@ temp/
 
 # Uploaded files (for development)
 uploads/
+
+# Test files
+test-syllabus.txt
+create-test-pdf.js
+*.pdf
+src/shared/*.js
+src/shared/*.d.ts
+src/shared/*.map
