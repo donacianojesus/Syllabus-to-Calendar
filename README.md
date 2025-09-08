@@ -82,7 +82,7 @@ curl -X POST http://localhost:3001/api/upload \
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/yourusername/lawbandit-calendar.git
+git clone https://github.com/donacianojesus/lawbandit-calendar.git
 cd lawbandit-calendar
 ```
 
