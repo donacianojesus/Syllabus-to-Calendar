@@ -1,13 +1,15 @@
 # LawBandit Calendar 
 
-**Status:** **Core Backend Complete** - Syllabus Upload API Fully Functional
+**Status:** **Core Backend Complete** - Syllabus Upload API fully functional.  
+**Next Phase:** Implement LLM-based parsing for flexible syllabus handling and JSON output.  
+**Frontend:** In development - React application to be built.
 
 This project transforms a law student's syllabus into a clean, organized calendar displaying assignments, readings, and exams. Designed for clarity, usability, and deployment-ready code, it helps students manage their academic schedules efficiently.
 
 ## **What's Working Now**
 
-- **Syllabus Upload API** - Upload PDF/text files and parse them automatically
-- **Smart Event Extraction** - Identifies assignments, exams, readings, and deadlines
+- **Syllabus Upload API** - Upload PDF/text files and parse them automatically (current: PDF parsing library; next: LLM-based parsing)
+- **Smart Event Extraction** - Currently detects assignments, exams, readings, and deadlines using pdf-parse
 - **Date Parsing** - Handles multiple date formats (MM/DD/YYYY, Month DD, etc.)
 - **Event Classification** - Automatically categorizes and prioritizes events
 - **Confidence Scoring** - Shows parsing quality (typically 80-90% accuracy)
@@ -28,13 +30,34 @@ LawBandit Calendar is a web application that automatically parses law school syl
 - **Error Handling:** Comprehensive validation and error responses
 - **File Validation:** Type checking and size limits (10MB max)
 
-### 🚧 **In Development (Next Phase)**
-- **File Upload UI:** Drag-and-drop interface for syllabus upload
+### **In Development (Next Phase)**
+- **LLM-Based Parsing:** Send cleaned syllabus text to an LLM to return structured JSON
+- **JSON Validation:** Ensure all events with dates are added to the calendar; undated events go under "activities"
 - **Calendar Display:** Monthly calendar view showing parsed events
 - **Event Management:** View, edit, and manage calendar events
 - **Frontend Integration:** Connect React frontend to backend API
 
-### 🔮 **Planned Features**
+### **Planned Features / LLM Workflow**
+- **Flexible Parsing:** LLM handles variability across different syllabus formats
+- **JSON Output:** Assignments, exams, and activities structured for calendar integration
+- **Activities Bucket:** Events without dates are added to a separate "activities" section
+
+#### Example LLM JSON Output
+```json
+{
+  "assignments": [
+    {"title": "Assignment 1", "due_date": "2025-09-15", "details": "Read chapters 1-3"}
+  ],
+  "exams": [
+    {"title": "Midterm Exam", "date": "2025-10-20"}
+  ],
+  "activities": [
+    {"title": "Weekly Reading", "details": "Chapters 4-5"}
+  ]
+}
+```
+
+### **Additional Planned Features**
 - **Google Calendar Integration:** Sync events directly to Google Calendar
 - **Multiple Syllabus Support:** Handle multiple courses simultaneously
 - **Export Options:** Download calendar as PDF or export to other formats
@@ -46,6 +69,9 @@ LawBandit Calendar is a web application that automatically parses law school syl
 - **Date Processing:** date-fns for robust date parsing
 - **Frontend:** React + Vite + Tailwind CSS
 - **Development:** Concurrently for running both servers
+
+**Legacy / Optional Parsing:**  
+PDF parsing library (pdf-parse) is still available for initial testing, but the recommended approach is the LLM workflow for more consistent and flexible results.
 
 ## **API Endpoints**
 
@@ -192,7 +218,7 @@ const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch
 async function testUpload() {
   const pdfFiles = fs.readdirSync('.').filter(f => f.endsWith('.pdf'));
   if (pdfFiles.length === 0) {
-    console.log('❌ No PDF files found. Place a PDF in the project root.');
+    console.log('No PDF files found. Place a PDF in the project root.');
     return;
   }
   
@@ -206,8 +232,8 @@ async function testUpload() {
   });
   
   const result = await response.json();
-  console.log('✅ Success! Events found:', result.data?.events?.length || 0);
-  console.log('🎯 Confidence:', result.metadata?.confidence + '%');
+  console.log('Success! Events found:', result.data?.events?.length || 0);
+  console.log('Confidence:', result.metadata?.confidence + '%');
 }
 
 testUpload();
@@ -329,6 +355,12 @@ You can test with:
 - Try with a different PDF format
 - Ensure the syllabus contains clear assignment dates
 - Check that dates are in recognizable formats (MM/DD/YYYY, Month DD, etc.)
+
+## **LLM Workflow Overview**
+1. Extract syllabus text from PDF and clean it
+2. Send cleaned text to LLM → return JSON with assignments, exams, activities
+3. Validate JSON → inject dated events into calendar; undated events go under "activities"
+4. Integrate results into LawBandit UI
 
 ## **Next Development Phase**
 
