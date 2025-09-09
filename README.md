@@ -33,6 +33,7 @@ LawBandit Calendar is a web application that automatically parses law school syl
 ### **In Development (Next Phase)**
 - **LLM-Based Parsing:** Send cleaned syllabus text to an LLM to return structured JSON
 - **JSON Validation:** Ensure all events with dates are added to the calendar; undated events go under "activities"
+- **File Upload UI:** Drag-and-drop interface for syllabus upload
 - **Calendar Display:** Monthly calendar view showing parsed events
 - **Event Management:** View, edit, and manage calendar events
 - **Frontend Integration:** Connect React frontend to backend API
@@ -108,7 +109,7 @@ curl -X POST http://localhost:3001/api/upload \
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/yourusername/lawbandit-calendar.git
+git clone https://github.com/donacianojesus/lawbandit-calendar.git
 cd lawbandit-calendar
 ```
 
