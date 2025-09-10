@@ -1,19 +1,21 @@
 # LawBandit Calendar 
 
-**Status:** **Core Backend Complete** - Syllabus Upload API fully functional.  
-**Next Phase:** Implement LLM-based parsing for flexible syllabus handling and JSON output.  
-**Frontend:** In development - React application to be built.
+**Status:** **Backend Complete** - LLM Integration with Smart Fallback System  
+**Backend:** Fully functional with AI-powered parsing and regex fallback  
+**Frontend:** Ready for development  
 
-This project transforms a law student's syllabus into a clean, organized calendar displaying assignments, readings, and exams. Designed for clarity, usability, and deployment-ready code, it helps students manage their academic schedules efficiently.
+This project transforms a law student's syllabus into a clean, organized calendar displaying assignments, readings, and exams. The system uses advanced LLM parsing with intelligent fallback to ensure reliable syllabus processing regardless of API availability.
 
 ## **What's Working Now**
 
-- **Syllabus Upload API** - Upload PDF/text files and parse them automatically (current: PDF parsing library; next: LLM-based parsing)
-- **Smart Event Extraction** - Currently detects assignments, exams, readings, and deadlines using pdf-parse
-- **Date Parsing** - Handles multiple date formats (MM/DD/YYYY, Month DD, etc.)
-- **Event Classification** - Automatically categorizes and prioritizes events
-- **Confidence Scoring** - Shows parsing quality (typically 80-90% accuracy)
-- **RESTful API** - Complete backend with health checks and error handling
+- **AI-Powered Parsing** - LLM-based syllabus parsing with OpenAI GPT-3.5-turbo
+- **Smart Fallback System** - Automatically falls back to regex parsing when LLM unavailable
+- **Syllabus Upload API** - Upload PDF/text files with intelligent parsing
+- **Advanced Event Extraction** - Detects assignments, exams, readings, and deadlines
+- **Flexible Date Parsing** - Handles multiple date formats and edge cases
+- **Event Classification** - AI-powered categorization and priority assignment
+- **Confidence Scoring** - Shows parsing quality for both LLM and regex methods
+- **Comprehensive API** - Full REST API with health checks, status monitoring, and comparison tools
 
 ## Overview
 
@@ -22,39 +24,49 @@ LawBandit Calendar is a web application that automatically parses law school syl
 ## Features 
 
 ### **Implemented (Backend Complete)**
+- **LLM Integration:** OpenAI GPT-3.5-turbo for intelligent syllabus parsing
+- **Smart Fallback System:** Automatic fallback to regex parsing when LLM unavailable
 - **Syllabus Upload API:** Upload PDF or text files via REST API
-- **Smart Text Parsing:** Extracts text from PDFs using pdf-parse library
-- **Event Detection:** Identifies assignments, exams, readings, and deadlines
-- **Date Recognition:** Parses various date formats automatically
-- **Event Classification:** Categorizes events by type and priority
-- **Error Handling:** Comprehensive validation and error responses
+- **AI-Powered Parsing:** Advanced text extraction and event detection
+- **Flexible Event Detection:** Identifies assignments, exams, readings, and deadlines
+- **Intelligent Date Recognition:** Parses various date formats with high accuracy
+- **AI Event Classification:** Smart categorization and priority assignment
+- **Comprehensive Error Handling:** Graceful degradation and detailed error responses
 - **File Validation:** Type checking and size limits (10MB max)
+- **API Status Monitoring:** Real-time service health and configuration checks
+- **Parsing Comparison:** Side-by-side LLM vs regex parsing results
 
-### **In Development (Next Phase)**
-- **LLM-Based Parsing:** Send cleaned syllabus text to an LLM to return structured JSON
-- **JSON Validation:** Ensure all events with dates are added to the calendar; undated events go under "activities"
+### **In Development**
 - **File Upload UI:** Drag-and-drop interface for syllabus upload
 - **Calendar Display:** Monthly calendar view showing parsed events
 - **Event Management:** View, edit, and manage calendar events
-- **Frontend Integration:** Connect React frontend to backend API
+- **Frontend Integration:** Connect React app to backend API
 
-### **Planned Features / LLM Workflow**
-- **Flexible Parsing:** LLM handles variability across different syllabus formats
-- **JSON Output:** Assignments, exams, and activities structured for calendar integration
-- **Activities Bucket:** Events without dates are added to a separate "activities" section
+### **LLM Workflow (Currently Active)**
+- **Intelligent Parsing:** LLM handles variability across different syllabus formats
+- **Structured JSON Output:** Assignments, exams, and activities with proper categorization
+- **Smart Fallback:** Automatic fallback to regex parsing when LLM quota exceeded
+- **Cost Optimization:** Text truncation and token management for efficient API usage
 
 #### Example LLM JSON Output
 ```json
 {
   "assignments": [
-    {"title": "Assignment 1", "due_date": "2025-09-15", "details": "Read chapters 1-3"}
+    {"title": "Assignment 1", "due_date": "2025-09-15", "details": "Read chapters 1-3", "priority": "high"}
   ],
   "exams": [
-    {"title": "Midterm Exam", "date": "2025-10-20"}
+    {"title": "Midterm Exam", "date": "2025-10-20", "priority": "urgent"}
   ],
   "activities": [
-    {"title": "Weekly Reading", "details": "Chapters 4-5"}
-  ]
+    {"title": "Weekly Reading", "details": "Chapters 4-5", "type": "reading"}
+  ],
+  "course_info": {
+    "course_name": "Constitutional Law",
+    "course_code": "LAW 101",
+    "semester": "Fall",
+    "year": 2025
+  },
+  "confidence_score": 92
 }
 ```
 
@@ -80,23 +92,47 @@ PDF parsing library (pdf-parse) is still available for initial testing, but the 
 - `GET /health` - Server health check
 - `GET /api` - API information and available endpoints
 - `GET /api/upload/info` - Upload requirements and supported formats
-- `POST /api/upload` - Upload and parse syllabus files
+- `POST /api/upload` - Upload and parse syllabus files (with LLM + regex fallback)
+- `GET /api/parse/status` - LLM service status and configuration
+- `POST /api/parse/llm` - Direct LLM parsing (text input only)
+- `POST /api/parse/compare` - Compare LLM vs regex parsing results
 
 ### Frontend (Port 3000)
-- `http://localhost:3000` - React application (in development)
+- `http://localhost:3000` - React application (ready for development)
 
-## **API Usage Example**
+## **API Usage Examples**
 
+### Upload and Parse Syllabus
 ```bash
-# Upload a syllabus
+# Upload a syllabus (uses LLM with regex fallback)
 curl -X POST http://localhost:3001/api/upload \
   -F "syllabus=@your-syllabus.pdf" \
   -F "courseName=Constitutional Law" \
   -F "courseCode=LAW 101" \
   -F "semester=Fall" \
   -F "year=2024"
+```
 
-# Response includes parsed events with dates, types, and priorities
+### Check LLM Service Status
+```bash
+# Check if LLM parsing is available
+curl http://localhost:3001/api/parse/status
+```
+
+### Direct LLM Parsing
+```bash
+# Parse text directly with LLM
+curl -X POST http://localhost:3001/api/parse/llm \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Assignment 1 due September 15, 2024", "courseName": "Test Course"}'
+```
+
+### Compare Parsing Methods
+```bash
+# Compare LLM vs regex parsing
+curl -X POST http://localhost:3001/api/parse/compare \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Assignment 1 due September 15, 2024", "courseName": "Test Course"}'
 ```
 
 ## Installation & Setup
@@ -122,6 +158,7 @@ npm install
 ```bash
 cp .env.example .env
 # Edit .env with your configuration
+# Add your OpenAI API key for LLM parsing (optional)
 ```
 
 4. **Run the development server:**
@@ -131,12 +168,14 @@ npm run dev
 
 5. **Test the API:**
 - Backend API: `http://localhost:3001`
-- Frontend: `http://localhost:3000` (in development)
+- Frontend: `http://localhost:3000` (In development)
 - Health check: `http://localhost:3001/health`
+- LLM Status: `http://localhost:3001/api/parse/status`
 
-6. **Upload a syllabus:**
-- Use the API directly: `POST http://localhost:3001/api/upload`
-- Or test with your own PDF/text syllabus file
+6. **Test LLM Integration:**
+- **With API Key:** LLM parsing will work automatically
+- **Without API Key:** System falls back to regex parsing
+- **Upload a syllabus:** Use `POST http://localhost:3001/api/upload`
 
 ### Development Commands
 
@@ -192,12 +231,19 @@ Create a `.env` file in the root directory:
 
 ```env
 # Server Configuration
-PORT=3000
+PORT=3001
 NODE_ENV=development
 
 # File Upload
 MAX_FILE_SIZE=10MB
 ALLOWED_FILE_TYPES=pdf,txt,doc,docx
+
+# LLM Configuration (Optional)
+OPENAI_API_KEY=your_openai_api_key_here
+LLM_MODEL=gpt-3.5-turbo
+LLM_MAX_TOKENS=2000
+LLM_TEMPERATURE=0.1
+ENABLE_LLM_PARSING=true
 
 # Optional: Google Calendar Integration
 GOOGLE_CALENDAR_CLIENT_ID=your_client_id
@@ -303,9 +349,10 @@ The API returns structured data including:
 - **Course Information:** Name, code, semester, year
 - **Parsed Events:** Array of calendar events with dates, types, and priorities
 - **Confidence Score:** Parsing quality (0-100%)
-- **Metadata:** File info, parsing statistics
+- **Parsing Method:** Indicates whether LLM or regex parsing was used
+- **Metadata:** File info, parsing statistics, and service status
 
-### Sample Response
+### Sample Response (LLM Parsing)
 ```json
 {
   "success": true,
@@ -314,7 +361,7 @@ The API returns structured data including:
     "courseCode": "LAW 101",
     "events": [
       {
-        "id": "assignment-1-2024-09-06",
+        "id": "assignment-1-case-brief-2024-09-06",
         "title": "Assignment 1: Case Brief",
         "date": "2024-09-06T04:00:00.000Z",
         "type": "assignment",
@@ -324,9 +371,28 @@ The API returns structured data including:
     ]
   },
   "metadata": {
-    "confidence": 85,
+    "confidence": 92,
+    "method": "llm",
     "fileType": "pdf",
     "eventsFound": 4
+  }
+}
+```
+
+### Sample Response (Regex Fallback)
+```json
+{
+  "success": true,
+  "data": {
+    "courseName": "Constitutional Law",
+    "courseCode": "LAW 101",
+    "events": [...]
+  },
+  "metadata": {
+    "confidence": 75,
+    "method": "regex",
+    "fileType": "pdf",
+    "eventsFound": 3
   }
 }
 ```
@@ -357,18 +423,20 @@ You can test with:
 - Ensure the syllabus contains clear assignment dates
 - Check that dates are in recognizable formats (MM/DD/YYYY, Month DD, etc.)
 
-## **LLM Workflow Overview**
+## **LLM Workflow Overview (Currently Active)**
 1. Extract syllabus text from PDF and clean it
-2. Send cleaned text to LLM → return JSON with assignments, exams, activities
-3. Validate JSON → inject dated events into calendar; undated events go under "activities"
-4. Integrate results into LawBandit UI
+2. Send cleaned text to LLM → return structured JSON with assignments, exams, activities
+3. Validate JSON → convert to calendar events with proper categorization
+4. **Smart Fallback:** If LLM fails, automatically use regex parsing
+5. Return results with parsing method and confidence score
 
-## **Next Development Phase**
+## **Next for Development**
 
 1. **File Upload UI** - Build React component for drag-and-drop upload
-2. **Calendar Display** - Show parsed events in monthly calendar view
+2. **Calendar Display** - Show parsed events in monthly calendar view  
 3. **Event Management** - Edit, delete, and manage calendar events
 4. **Frontend Integration** - Connect React app to backend API
+5. **Activities Panel** - Handle undated events and activities
 
 ### Development Workflow
 1. Fork the repository
@@ -381,12 +449,15 @@ You can test with:
 
 ## **Current Status**
 
-- **Backend API:** Fully functional syllabus upload and parsing
-- **File Processing:** PDF and text file support with smart parsing
-- **Event Extraction:** Automatic detection of assignments, exams, and deadlines
-- **Frontend UI:** In development - basic React app running
-- **Calendar Display:** Planned for next phase
-- **Event Management:** Planned for next phase
+- **Backend API:** Fully functional with LLM integration and smart fallback
+- **LLM Parsing:** OpenAI GPT-3.5-turbo integration with quota management
+- **File Processing:** PDF and text file support with intelligent parsing
+- **Event Extraction:** AI-powered detection of assignments, exams, and deadlines
+- **Smart Fallback:** Automatic fallback to regex parsing when LLM unavailable
+- **API Monitoring:** Real-time service status and configuration checks
+- **Frontend UI:** Ready for Phase 2 development - basic React app running
+- **Calendar Display:** Planned for Phase 2
+- **Event Management:** Planned for Phase 2
 
 ## **Contributing**
 
