@@ -29,6 +29,7 @@ app.get('/health', (req, res) => {
 
 // API routes
 app.use('/api/upload', uploadRouter);
+app.use('/api/parse', uploadRouter);
 
 app.get('/api', (req, res) => {
   res.json({ 
@@ -38,6 +39,9 @@ app.get('/api', (req, res) => {
       health: '/health',
       upload: '/api/upload (POST)',
       uploadInfo: '/api/upload/info (GET)',
+      parseLLM: '/api/parse/llm (POST)',
+      parseCompare: '/api/parse/compare (POST)',
+      parseStatus: '/api/parse/status (GET)',
       events: '/api/events (GET, POST, PUT, DELETE)'
     }
   });

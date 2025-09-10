@@ -3,6 +3,7 @@ import { upload, validateUploadedFile, getFileType } from '../utils/fileUpload';
 import { PdfParserService } from '../services/pdfParser';
 import { TextParserService } from '../services/textParser';
 import { SyllabusParserService } from '../services/syllabusParser';
+import { LLMParserService } from '../services/llmParser';
 import { ApiResponse, ParsedSyllabus } from '../../../shared/types';
 
 const router = express.Router();
@@ -99,6 +100,7 @@ router.post('/', upload.single('syllabus'), async (req, res) => {
       message: `Successfully parsed syllabus with ${parsingResult.data?.events.length || 0} events found`,
       metadata: {
         confidence: parsingResult.confidence,
+        method: parsingResult.method || 'unknown',
         fileType,
         parsingMetadata,
         originalFilename: file.originalname,
@@ -138,6 +140,149 @@ router.get('/info', (req, res) => {
     },
     message: 'Upload endpoint information',
   } as ApiResponse<any>);
+});
+
+/**
+ * POST /api/parse/llm
+ * Parse syllabus text using LLM only (no file upload)
+ */
+router.post('/llm', async (req, res) => {
+  try {
+    const { text, courseName, courseCode, semester, year } = req.body;
+
+    if (!text || typeof text !== 'string') {
+      return res.status(400).json({
+        success: false,
+        error: 'Text content is required',
+      } as ApiResponse<null>);
+    }
+
+    const result = await LLMParserService.parseSyllabusWithLLM(
+      text,
+      courseName,
+      courseCode,
+      semester,
+      year
+    );
+
+    if (!result.success) {
+      return res.status(500).json({
+        success: false,
+        error: result.error || 'LLM parsing failed',
+      } as ApiResponse<null>);
+    }
+
+    return res.json({
+      success: true,
+      data: result.data,
+      message: `Successfully parsed syllabus with LLM (${result.method}) - ${result.data?.events.length || 0} events found`,
+      metadata: {
+        confidence: result.confidence,
+        method: result.method,
+        model: process.env.LLM_MODEL || 'gpt-3.5-turbo',
+      },
+    } as ApiResponse<ParsedSyllabus>);
+
+  } catch (error) {
+    console.error('LLM parsing error:', error);
+    
+    return res.status(500).json({
+      success: false,
+      error: 'Internal server error during LLM parsing',
+      message: process.env.NODE_ENV === 'development' 
+        ? (error instanceof Error ? error.message : 'Unknown error')
+        : 'An error occurred while processing your request',
+    } as ApiResponse<null>);
+  }
+});
+
+/**
+ * POST /api/parse/compare
+ * Compare LLM parsing vs regex parsing
+ */
+router.post('/compare', async (req, res) => {
+  try {
+    const { text, courseName, courseCode, semester, year } = req.body;
+
+    if (!text || typeof text !== 'string') {
+      return res.status(400).json({
+        success: false,
+        error: 'Text content is required',
+      } as ApiResponse<null>);
+    }
+
+    // Run both parsing methods
+    const [llmResult, regexResult] = await Promise.allSettled([
+      LLMParserService.parseSyllabusWithLLM(text, courseName, courseCode, semester, year),
+      SyllabusParserService.parseSyllabus(text, courseName, courseCode, semester, year)
+    ]);
+
+    const comparison = {
+      llm: {
+        success: llmResult.status === 'fulfilled' && llmResult.value.success,
+        data: llmResult.status === 'fulfilled' ? llmResult.value.data : null,
+        confidence: llmResult.status === 'fulfilled' ? llmResult.value.confidence : 0,
+        error: llmResult.status === 'rejected' ? llmResult.reason : (llmResult.status === 'fulfilled' ? llmResult.value.error : null),
+        method: 'llm',
+      },
+      regex: {
+        success: regexResult.status === 'fulfilled' && regexResult.value.success,
+        data: regexResult.status === 'fulfilled' ? regexResult.value.data : null,
+        confidence: regexResult.status === 'fulfilled' ? regexResult.value.confidence : 0,
+        error: regexResult.status === 'rejected' ? regexResult.reason : (regexResult.status === 'fulfilled' ? regexResult.value.error : null),
+        method: 'regex',
+      },
+    };
+
+    return res.json({
+      success: true,
+      data: comparison,
+      message: 'Comparison completed',
+    } as ApiResponse<any>);
+
+  } catch (error) {
+    console.error('Comparison error:', error);
+    
+    return res.status(500).json({
+      success: false,
+      error: 'Internal server error during comparison',
+      message: process.env.NODE_ENV === 'development' 
+        ? (error instanceof Error ? error.message : 'Unknown error')
+        : 'An error occurred while processing your request',
+    } as ApiResponse<null>);
+  }
+});
+
+/**
+ * GET /api/parse/status
+ * Get LLM service status and configuration
+ */
+router.get('/status', (req, res) => {
+  try {
+    const status = LLMParserService.getStatus();
+    
+    return res.json({
+      success: true,
+      data: {
+        llm: status,
+        regex: { available: true },
+        environment: {
+          enableLLM: process.env.ENABLE_LLM_PARSING === 'true',
+          model: process.env.LLM_MODEL || 'gpt-3.5-turbo',
+          maxTokens: process.env.LLM_MAX_TOKENS || '2000',
+          temperature: process.env.LLM_TEMPERATURE || '0.1',
+        },
+      },
+      message: 'Parsing service status',
+    } as ApiResponse<any>);
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: 'Failed to get parsing status',
+      message: error instanceof Error ? error.message : 'Unknown error',
+    } as ApiResponse<null>);
+  }
 });
 
 export default router;

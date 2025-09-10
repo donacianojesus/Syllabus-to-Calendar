@@ -1,11 +1,13 @@
 import { CalendarEvent, EventType, Priority, ParsedSyllabus } from '../../../shared/types';
 import { DateParserService, DateParseResult } from '../utils/dateParser';
+import { LLMParserService, LLMParsingResult } from './llmParser';
 
 export interface ParsingResult {
   success: boolean;
   data?: ParsedSyllabus;
   error?: string;
   confidence: number; // 0-100, how confident we are in the parsing
+  method?: 'llm' | 'regex' | 'fallback'; // Which parsing method was used
 }
 
 export class SyllabusParserService {
@@ -49,8 +51,53 @@ export class SyllabusParserService {
 
   /**
    * Parse syllabus text and extract calendar events
+   * Tries LLM parsing first, falls back to regex parsing if LLM fails
    */
   static async parseSyllabus(
+    text: string,
+    courseName?: string,
+    courseCode?: string,
+    semester?: string,
+    year?: number
+  ): Promise<ParsingResult> {
+    try {
+      // Try LLM parsing first
+      const llmResult = await LLMParserService.parseSyllabusWithLLM(
+        text,
+        courseName,
+        courseCode,
+        semester,
+        year
+      );
+
+      if (llmResult.success && llmResult.data) {
+        return {
+          success: true,
+          data: llmResult.data,
+          confidence: llmResult.confidence,
+          method: 'llm',
+        };
+      }
+
+      // Fallback to regex parsing
+      console.log('LLM parsing failed, falling back to regex parsing:', llmResult.error);
+      return this.parseSyllabusWithRegex(text, courseName, courseCode, semester, year);
+
+    } catch (error) {
+      console.error('Syllabus parsing error:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown parsing error',
+        confidence: 0,
+        method: 'fallback',
+      };
+    }
+  }
+
+  /**
+   * Parse syllabus using regex patterns (fallback method)
+   */
+  private static async parseSyllabusWithRegex(
     text: string,
     courseName?: string,
     courseCode?: string,
@@ -88,12 +135,14 @@ export class SyllabusParserService {
         success: true,
         data: parsedSyllabus,
         confidence,
+        method: 'regex',
       };
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown parsing error',
+        error: error instanceof Error ? error.message : 'Unknown regex parsing error',
         confidence: 0,
+        method: 'fallback',
       };
     }
   }
