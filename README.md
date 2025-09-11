@@ -2,7 +2,7 @@
 
 **Status:** **Backend Complete** - Robust AI-powered syllabus parsing with universal format support  
 **Frontend:** Dashboard layout complete, file upload interface in development  
-**Latest Update:** Upgraded to GPT-4o Mini for 60% cost savings and better performance
+**Latest Update:** Upgraded to GPT-4o Mini for cost savings and better performance
 
 This project transforms any law school syllabus into a clean, organized calendar displaying assignments, readings, and exams. The system uses advanced LLM parsing with intelligent fallback to ensure reliable syllabus processing regardless of format or API availability.
 
