@@ -1,6 +1,6 @@
 # LawBandit Calendar 
 
-**Status:** **Frontend Dashboard Complete** - Frontend Development in Progress 
+**Status:** **Frontend Dashboard Complete** - Frontend Development in Progress   
 **Backend:** Fully functional with AI-powered parsing and regex fallback  
 **Frontend:** Dashboard layout complete, file upload interface in development  
 
