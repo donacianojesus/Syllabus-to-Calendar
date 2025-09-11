@@ -17,10 +17,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onPageChange }) => {
     <div className="w-64 bg-lawbandit-sidebar h-screen flex flex-col">
       {/* Logo */}
       <div className="p-6">
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-            <span className="text-gray-900 font-bold text-sm">L</span>
-          </div>
+        <div className="flex items-center">
           <span className="text-white font-bold text-xl">LawBandit</span>
         </div>
       </div>
@@ -56,13 +53,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onPageChange }) => {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-white font-medium truncate">User</p>
-            <p className="text-gray-400 text-sm">Not Subscribed</p>
           </div>
-          <button className="text-gray-400 hover:text-white">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-            </svg>
-          </button>
         </div>
       </div>
     </div>
