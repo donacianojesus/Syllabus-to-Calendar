@@ -157,7 +157,15 @@ export class LLMParserService {
   ): string {
     const courseInfo = courseName ? `\nCourse: ${courseName}${courseCode ? ` (${courseCode})` : ''}${semester ? ` - ${semester}` : ''}${year ? ` ${year}` : ''}` : '';
 
-    return `You are an expert at parsing academic syllabi and extracting structured information. Please analyze the following syllabus text and extract all assignments, exams, and activities with their dates.
+    return `You are an expert at parsing academic syllabi and extracting structured information. Please analyze the following syllabus text and extract ONLY specific assignments, readings, and exams. 
+
+CRITICAL INSTRUCTIONS:
+1. IGNORE completely: course descriptions, materials lists, objectives, policies, contact info, general textbook references, "one chapter per week" statements
+2. FIND and EXTRACT from: "Weekly Assignments", "Assignment Schedule", "Reading Schedule", "Course Schedule", or any section with specific weekly tasks
+3. LOOK FOR patterns like: "Week 1:", "January 17:", "Read:", "Assignment:", "Due:", specific page numbers, case names
+4. PRIORITIZE: Specific assignments with dates, readings with page numbers, case names, exam dates
+5. EXTRACT EXACTLY as written: Don't generalize or summarize - capture the specific details
+6. CRITICAL: If you see "Week 1 Readings: M: Introduction materials (Hawkins v. McGee) & Home Building v. Blaisdell W: Door Dash, Inc. v. City of New York; Pages 38-54", extract these EXACT readings, not generic chapter references
 
 ${courseInfo}
 
@@ -185,9 +193,9 @@ Please extract and return a JSON object with the following structure:
   ],
   "activities": [
     {
-      "title": "Activity title",
+      "title": "Reading assignment title",
       "details": "Optional description",
-      "type": "reading|class|discussion|other",
+      "type": "reading",
       "priority": "low|medium|high|urgent"
     }
   ],
@@ -200,13 +208,47 @@ Please extract and return a JSON object with the following structure:
   "confidence_score": 85
 }
 
-Important guidelines:
-1. Only include events with specific dates in assignments and exams
-2. Include events without dates in activities
-3. Use ISO date format (YYYY-MM-DD) for all dates
-4. Be conservative with confidence scores (0-100)
-5. Extract course information if not provided
-6. Return valid JSON only, no additional text
+EXTRACTION RULES:
+1. MUST EXTRACT: Specific weekly assignments, readings with page numbers, case names, exam dates
+2. MUST IGNORE: General course descriptions, textbook lists, policies, contact information
+3. LOOK FOR: "Week X:", "Read:", "Assignment:", "Due:", "Pages XX-XX", "Case Name v. Case Name"
+4. EXTRACT EXACTLY: Don't generalize - capture specific details as written
+5. DATE HANDLING: Use ISO format (YYYY-MM-DD) for specific dates, move ambiguous dates to activities
+6. PRIORITIZE: Weekly schedules over general course materials
+7. FORMAT: Return valid JSON only, no additional text
+
+WHAT TO EXTRACT:
+- "Week 1: Read Hawkins v. McGee, pages 38-54" → Extract as specific reading
+- "Assignment Due: February 14" → Extract as assignment with date
+- "Midterm Exam: March 15" → Extract as exam with date
+- "Read: Chapters 25-28, pages 181-206" → Extract as specific reading
+
+WHAT TO IGNORE:
+- "Required textbook: Situations and Contracts"
+- "Course objectives: To learn..."
+- "Contact: professor@email.com"
+- "Attendance policy: Students must..."
+- "We will cover approximately one chapter per week"
+- "Each week we will cover one chapter"
+- General course structure statements
+
+WHAT TO EXTRACT (EXAMPLES FROM DAWSON SYLLABUS):
+- "Week 1 Readings: M: Introduction materials (Hawkins v. McGee) & Home Building v. Blaisdell W: Door Dash, Inc. v. City of New York; Pages 38-54"
+- "Week 2: Readings: M: Pages 66-90 W: Pages 91-101; 119-138"
+- "Week 6: Readings: M: • Hamer v. Sidway, 258-261 • Ricketts v. Scothorn, Allegheny College, Drennan v. Star Paving, Hoffman v. Red Owl, 277-296"
+
+EXAMPLE 1: If you see "Week 1 Readings: M: Introduction materials (Hawkins v. McGee) & Home Building v. Blaisdell W: Door Dash, Inc. v. City of New York; Pages 38-54", extract:
+- "Week 1 Monday: Hawkins v. McGee and Home Building v. Blaisdell"
+- "Week 1 Wednesday: Door Dash, Inc. v. City of New York; Pages 38-54"
+
+EXAMPLE 2: If you see "Week 1 January 17 • Read: The Handbook for the New Legal Writer: Chapters 25-28, pages 181-206", extract:
+- "Week 1: The Handbook for the New Legal Writer: Chapters 25-28, pages 181-206"
+
+EXAMPLE 3: If you see "Week 1 Readings: M: Introduction materials (Hawkins v. McGee) & Home Building v. Blaisdell W: Door Dash, Inc. v. City of New York; Pages 38-54", extract:
+- "Week 1 Monday: Introduction materials (Hawkins v. McGee) & Home Building v. Blaisdell"
+- "Week 1 Wednesday: Door Dash, Inc. v. City of New York; Pages 38-54"
+
+CRITICAL: Look for sections that start with "Week" followed by specific assignments, readings, and page numbers. Extract each specific reading assignment exactly as it appears. Do NOT extract general course materials or textbook references.
 
 JSON Response:`;
   }
@@ -256,25 +298,52 @@ JSON Response:`;
         return { success: false, error: 'Missing required fields in LLM response' };
       }
 
-      // Validate date formats
+      // Validate date formats - be more flexible with ambiguous dates
       const validateDate = (dateStr: string) => {
+        // Skip validation for placeholder dates (XX-XX format)
+        if (dateStr.includes('XX') || dateStr.includes('TBD') || dateStr.includes('TBA')) {
+          return false; // We'll filter these out later
+        }
         const date = new Date(dateStr);
         return !isNaN(date.getTime()) && dateStr.match(/^\d{4}-\d{2}-\d{2}$/);
       };
 
-      // Validate assignments
-      for (const assignment of parsed.assignments) {
-        if (!validateDate(assignment.due_date)) {
-          return { success: false, error: `Invalid date format in assignment: ${assignment.due_date}` };
-        }
-      }
+      // Collect events with invalid dates to add to activities
+      const invalidAssignments: any[] = [];
+      const invalidExams: any[] = [];
 
-      // Validate exams
-      for (const exam of parsed.exams) {
-        if (!validateDate(exam.date)) {
-          return { success: false, error: `Invalid date format in exam: ${exam.date}` };
+      // Filter assignments - keep valid ones, collect invalid ones
+      parsed.assignments = parsed.assignments.filter((assignment: any) => {
+        if (!validateDate(assignment.due_date)) {
+          console.log(`Moving assignment with invalid date to activities: ${assignment.due_date}`);
+          invalidAssignments.push({
+            title: assignment.title,
+            details: assignment.details || `Due date: ${assignment.due_date}`,
+            type: 'other',
+            priority: assignment.priority || 'medium'
+          });
+          return false;
         }
-      }
+        return true;
+      });
+
+      // Filter exams - keep valid ones, collect invalid ones
+      parsed.exams = parsed.exams.filter((exam: any) => {
+        if (!validateDate(exam.date)) {
+          console.log(`Moving exam with invalid date to activities: ${exam.date}`);
+          invalidExams.push({
+            title: exam.title,
+            details: exam.details || `Exam date: ${exam.date}`,
+            type: 'other',
+            priority: exam.priority || 'medium'
+          });
+          return false;
+        }
+        return true;
+      });
+
+      // Add invalid events to activities
+      parsed.activities = [...(parsed.activities || []), ...invalidAssignments, ...invalidExams];
 
       return { success: true, data: parsed };
 
@@ -319,9 +388,41 @@ JSON Response:`;
       });
     }
 
-    // Convert activities (these don't have dates, so we'll handle them separately)
-    // For now, we'll skip activities since they don't have dates
-    // In the future, these could be added to a separate "activities" section
+    // Convert activities (these don't have dates, so we'll add them with a placeholder date)
+    // Only include reading assignments and academic activities, filter out administrative items
+    for (const activity of llmData.activities) {
+      // Skip administrative items
+      const title = activity.title.toLowerCase();
+      const description = (activity.details || '').toLowerCase();
+      
+      // Filter out administrative items
+      if (title.includes('office hours') || 
+          title.includes('email') || 
+          title.includes('class time') || 
+          title.includes('conference') ||
+          title.includes('blackboard') ||
+          title.includes('twen') ||
+          title.includes('absence') ||
+          title.includes('policy') ||
+          description.includes('office hours') ||
+          description.includes('email') ||
+          description.includes('class time')) {
+        continue; // Skip this activity
+      }
+      
+      // Use a placeholder date far in the future for activities without dates
+      const placeholderDate = new Date('2099-12-31');
+      
+      events.push({
+        id: this.generateEventId(activity.title, placeholderDate),
+        title: activity.title,
+        description: activity.details,
+        date: placeholderDate,
+        type: activity.type === 'reading' ? EventType.READING : EventType.OTHER,
+        priority: this.mapPriority(activity.priority),
+        completed: false,
+      });
+    }
 
     return events.sort((a, b) => a.date.getTime() - b.date.getTime());
   }
