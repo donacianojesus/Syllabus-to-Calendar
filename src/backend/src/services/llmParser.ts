@@ -129,6 +129,52 @@ export class LLMParserService {
    * Preprocess text for LLM consumption
    */
   private static preprocessText(text: string): string {
+    // Look for weekly schedule sections
+    const weeklyPatterns = [
+      /Week \d+.*?(?=Week \d+|$)/gs,
+      /Here are the first.*?weeks in more detail:.*?(?=Week \d+|$)/gs,
+      /Weekly Assignments.*?(?=Week \d+|$)/gs,
+      /Assignment Schedule.*?(?=Week \d+|$)/gs
+    ];
+    
+    for (const pattern of weeklyPatterns) {
+      const matches = text.match(pattern);
+      if (matches && matches.length > 0) {
+        const weeklyText = matches.join('\n');
+        if (weeklyText.length > 100) { // Only use if substantial content
+          return weeklyText
+            .replace(/\s+/g, ' ')
+            .replace(/\r\n/g, '\n')
+            .replace(/\r/g, '\n')
+            .substring(0, 15000) // Increased limit for weekly schedules
+            .trim();
+        }
+      }
+    }
+    
+    // Look for assignment schedule patterns
+    const assignmentPatterns = [
+      /Week Date Assignments.*?(?=Week \d+|$)/gs,
+      /Writing Assignment Due.*?(?=Week \d+|$)/gs,
+      /APPELLATE BRIEF DUE.*?(?=Week \d+|$)/gs
+    ];
+    
+    for (const pattern of assignmentPatterns) {
+      const matches = text.match(pattern);
+      if (matches && matches.length > 0) {
+        const assignmentText = matches.join('\n');
+        if (assignmentText.length > 50) {
+          return assignmentText
+            .replace(/\s+/g, ' ')
+            .replace(/\r\n/g, '\n')
+            .replace(/\r/g, '\n')
+            .substring(0, 15000)
+            .trim();
+        }
+      }
+    }
+    
+    // Fallback to original processing
     return text
       // Normalize whitespace
       .replace(/\s+/g, ' ')
@@ -141,7 +187,7 @@ export class LLMParserService {
       // Remove excessive newlines
       .replace(/\n\s*\n\s*\n/g, '\n\n')
       // Truncate if too long (to manage token limits)
-      .substring(0, 8000)
+      .substring(0, 15000) // Increased limit
       .trim();
   }
 
@@ -157,98 +203,80 @@ export class LLMParserService {
   ): string {
     const courseInfo = courseName ? `\nCourse: ${courseName}${courseCode ? ` (${courseCode})` : ''}${semester ? ` - ${semester}` : ''}${year ? ` ${year}` : ''}` : '';
 
-    return `You are an expert at parsing academic syllabi and extracting structured information. Please analyze the following syllabus text and extract ONLY specific assignments, readings, and exams. 
+    return `You are an expert at parsing academic syllabi. Extract ALL specific assignments, readings, and exams from the syllabus text below.
 
-CRITICAL INSTRUCTIONS:
-1. IGNORE completely: course descriptions, materials lists, objectives, policies, contact info, general textbook references, "one chapter per week" statements
-2. FIND and EXTRACT from: "Weekly Assignments", "Assignment Schedule", "Reading Schedule", "Course Schedule", or any section with specific weekly tasks
-3. LOOK FOR patterns like: "Week 1:", "January 17:", "Read:", "Assignment:", "Due:", specific page numbers, case names
-4. PRIORITIZE: Specific assignments with dates, readings with page numbers, case names, exam dates
-5. EXTRACT EXACTLY as written: Don't generalize or summarize - capture the specific details
-6. CRITICAL: If you see "Week 1 Readings: M: Introduction materials (Hawkins v. McGee) & Home Building v. Blaisdell W: Door Dash, Inc. v. City of New York; Pages 38-54", extract these EXACT readings, not generic chapter references
+CRITICAL: Extract EVERY week's assignments, not just the first week!
 
 ${courseInfo}
 
 Syllabus Text:
 ${text}
 
-Please extract and return a JSON object with the following structure:
+EXTRACTION RULES:
+1. FIND ALL weekly schedules, assignment schedules, and reading schedules
+2. EXTRACT EVERY week's content (Week 1, Week 2, Week 3, etc.)
+3. EXTRACT assignments with due dates
+4. EXTRACT readings with page numbers and case names
+5. EXTRACT exams with dates
+6. IGNORE: course descriptions, policies, contact info, general materials
+
+SPECIFIC PATTERNS TO FIND:
+- "Week X Readings:" → Extract all readings for that week
+- "Week X:" → Extract all assignments for that week  
+- "Assignment Due:" → Extract as assignment
+- "Exam:" or "Midterm" or "Final" → Extract as exam
+- "Read:" → Extract as reading
+- "Pages XX-XX" → Extract with page numbers
+- "Case Name v. Case Name" → Extract case names
+
+EXAMPLES:
+If you see "Week 1 Readings: M: Introduction materials (Hawkins v. McGee) & Home Building v. Blaisdell W: Door Dash, Inc. v. City of New York; Pages 38-54", extract:
+- "Week 1 Monday: Introduction materials (Hawkins v. McGee) & Home Building v. Blaisdell"
+- "Week 1 Wednesday: Door Dash, Inc. v. City of New York; Pages 38-54"
+
+If you see "Week 2: Readings: M: Pages 66-90 W: Pages 91-101; 119-138", extract:
+- "Week 2 Monday: Pages 66-90"
+- "Week 2 Wednesday: Pages 91-101; 119-138"
+
+If you see "Writing Assignment Due: Research Report", extract:
+- "Research Report" as assignment
+
+Return JSON with this structure:
 {
   "assignments": [
     {
       "title": "Assignment title",
-      "due_date": "YYYY-MM-DD",
-      "details": "Optional description",
-      "priority": "low|medium|high|urgent"
+      "due_date": "YYYY-MM-DD or TBD",
+      "details": "Description",
+      "priority": "medium"
     }
   ],
   "exams": [
     {
-      "title": "Exam title",
-      "date": "YYYY-MM-DD",
-      "time": "Optional time",
-      "details": "Optional description",
-      "priority": "low|medium|high|urgent"
+      "title": "Exam title", 
+      "date": "YYYY-MM-DD or TBD",
+      "details": "Description",
+      "priority": "high"
     }
   ],
   "activities": [
     {
-      "title": "Reading assignment title",
-      "details": "Optional description",
+      "title": "Reading title",
+      "details": "Description with page numbers",
       "type": "reading",
-      "priority": "low|medium|high|urgent"
+      "priority": "medium"
     }
   ],
   "course_info": {
-    "course_name": "Extracted course name",
-    "course_code": "Extracted course code",
-    "semester": "Extracted semester",
+    "course_name": "Course name",
+    "course_code": "Course code", 
+    "semester": "Semester",
     "year": 2024
   },
-  "confidence_score": 85
+  "confidence_score": 90
 }
 
-EXTRACTION RULES:
-1. MUST EXTRACT: Specific weekly assignments, readings with page numbers, case names, exam dates
-2. MUST IGNORE: General course descriptions, textbook lists, policies, contact information
-3. LOOK FOR: "Week X:", "Read:", "Assignment:", "Due:", "Pages XX-XX", "Case Name v. Case Name"
-4. EXTRACT EXACTLY: Don't generalize - capture specific details as written
-5. DATE HANDLING: Use ISO format (YYYY-MM-DD) for specific dates, move ambiguous dates to activities
-6. PRIORITIZE: Weekly schedules over general course materials
-7. FORMAT: Return valid JSON only, no additional text
-
-WHAT TO EXTRACT:
-- "Week 1: Read Hawkins v. McGee, pages 38-54" → Extract as specific reading
-- "Assignment Due: February 14" → Extract as assignment with date
-- "Midterm Exam: March 15" → Extract as exam with date
-- "Read: Chapters 25-28, pages 181-206" → Extract as specific reading
-
-WHAT TO IGNORE:
-- "Required textbook: Situations and Contracts"
-- "Course objectives: To learn..."
-- "Contact: professor@email.com"
-- "Attendance policy: Students must..."
-- "We will cover approximately one chapter per week"
-- "Each week we will cover one chapter"
-- General course structure statements
-
-WHAT TO EXTRACT (EXAMPLES FROM DAWSON SYLLABUS):
-- "Week 1 Readings: M: Introduction materials (Hawkins v. McGee) & Home Building v. Blaisdell W: Door Dash, Inc. v. City of New York; Pages 38-54"
-- "Week 2: Readings: M: Pages 66-90 W: Pages 91-101; 119-138"
-- "Week 6: Readings: M: • Hamer v. Sidway, 258-261 • Ricketts v. Scothorn, Allegheny College, Drennan v. Star Paving, Hoffman v. Red Owl, 277-296"
-
-EXAMPLE 1: If you see "Week 1 Readings: M: Introduction materials (Hawkins v. McGee) & Home Building v. Blaisdell W: Door Dash, Inc. v. City of New York; Pages 38-54", extract:
-- "Week 1 Monday: Hawkins v. McGee and Home Building v. Blaisdell"
-- "Week 1 Wednesday: Door Dash, Inc. v. City of New York; Pages 38-54"
-
-EXAMPLE 2: If you see "Week 1 January 17 • Read: The Handbook for the New Legal Writer: Chapters 25-28, pages 181-206", extract:
-- "Week 1: The Handbook for the New Legal Writer: Chapters 25-28, pages 181-206"
-
-EXAMPLE 3: If you see "Week 1 Readings: M: Introduction materials (Hawkins v. McGee) & Home Building v. Blaisdell W: Door Dash, Inc. v. City of New York; Pages 38-54", extract:
-- "Week 1 Monday: Introduction materials (Hawkins v. McGee) & Home Building v. Blaisdell"
-- "Week 1 Wednesday: Door Dash, Inc. v. City of New York; Pages 38-54"
-
-CRITICAL: Look for sections that start with "Week" followed by specific assignments, readings, and page numbers. Extract each specific reading assignment exactly as it appears. Do NOT extract general course materials or textbook references.
+CRITICAL: Extract ALL weeks, not just Week 1. Look for every "Week X:" pattern in the text.
 
 JSON Response:`;
   }
