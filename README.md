@@ -2,7 +2,7 @@
 
 **Status:** **Backend Complete** - Robust AI-powered syllabus parsing with universal format support  
 **Frontend:** Dashboard layout complete, file upload interface in development  
-**Latest Update:** Upgraded to GPT-4o Mini for cost savings and better performance
+**Latest Update:** Upgraded to GPT-4o better performance
 
 This project transforms any law school syllabus into a clean, organized calendar displaying assignments, readings, and exams. The system uses advanced LLM parsing with intelligent fallback to ensure reliable syllabus processing regardless of format or API availability.
 
@@ -17,7 +17,7 @@ The parser now **consistently extracts specific assignments, readings, and exams
 
 ### **Backend (Complete)**
 - **Universal Syllabus Parser** - Extracts specific assignments from ANY syllabus format
-- **AI-Powered Parsing** - LLM-based syllabus parsing with OpenAI GPT-4o Mini 
+- **AI-Powered Parsing** - LLM-based syllabus parsing with OpenAI GPT-4o
 - **Smart Fallback System** - Automatically falls back to regex parsing when LLM unavailable
 - **Syllabus Upload API** - Upload PDF/text files with intelligent parsing
 - **Advanced Event Extraction** - Detects assignments, exams, readings, and deadlines
@@ -44,7 +44,7 @@ LawBandit Calendar is a web application that automatically parses law school syl
 
 ### **Implemented (Backend Complete)**
 - **Universal Syllabus Parser:** Extracts specific assignments from ANY syllabus format
-- **LLM Integration:** OpenAI GPT-4o Mini for intelligent syllabus parsing 
+- **LLM Integration:** OpenAI GPT-4o for intelligent syllabus parsing 
 - **Smart Fallback System:** Automatic fallback to regex parsing when LLM unavailable
 - **Syllabus Upload API:** Upload PDF or text files via REST API
 - **AI-Powered Parsing:** Advanced text extraction and event detection
@@ -99,10 +99,10 @@ The parser now **consistently extracts specific assignments from any syllabus fo
 ```
 
 ### **LLM Workflow (Currently Active)**
-- **Intelligent Parsing:** GPT-4o Mini handles variability across different syllabus formats
+- **Intelligent Parsing:** GPT-4o handles variability across different syllabus formats
 - **Structured JSON Output:** Assignments, exams, and activities with proper categorization
 - **Smart Fallback:** Automatic fallback to regex parsing when LLM quota exceeded
-- **Cost Optimization:** GPT-4o Mini provides 60% cost savings with better performance
+- **Cost Optimization:** GPT-4o provides cost savings with better performance
 
 #### Example LLM JSON Output
 ```json
@@ -538,7 +538,7 @@ You can test with:
 ### **Backend (Complete)**
 - **Universal Parser:** Extracts specific assignments from ANY syllabus format
 - **API:** Fully functional with LLM integration and smart fallback
-- **LLM Parsing:** OpenAI GPT-4o Mini integration with quota management 
+- **LLM Parsing:** OpenAI GPT-4o integration with quota management 
 - **File Processing:** PDF and text file support with intelligent parsing
 - **Event Extraction:** AI-powered detection of assignments, exams, and deadlines
 - **Specific Assignment Detection:** Extracts exact case names, page numbers, and assignment details
@@ -615,7 +615,7 @@ You can test with:
 - **Smart Filtering:** Prioritizes assignments, readings, and exams over administrative content
 
 ### **Technical Achievements**
-- **LLM Integration:** OpenAI GPT-4o Mini with intelligent prompt engineering 
+- **LLM Integration:** OpenAI GPT-4o with intelligent prompt engineering 
 - **Date Validation:** Handles ambiguous dates and moves them to activities section
 - **Event Classification:** AI-powered categorization and priority assignment
 
