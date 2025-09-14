@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
+import UploadPage from './pages/UploadPage'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
@@ -14,19 +15,16 @@ function App() {
   const renderPageContent = () => {
     switch (currentPage) {
       case 'home':
-        return <HomePage />
+        return <HomePage onNavigate={handlePageChange} />
       case 'upload':
-        return <div className="text-center py-12">
-          <h2 className="text-2xl font-bold text-white mb-4">Upload Syllabus</h2>
-          <p className="text-gray-400">Upload functionality coming soon...</p>
-        </div>
+        return <UploadPage />
       case 'calendar':
         return <div className="text-center py-12">
           <h2 className="text-2xl font-bold text-white mb-4">Calendar View</h2>
           <p className="text-gray-400">Calendar functionality coming soon...</p>
         </div>
       default:
-        return <HomePage />
+        return <HomePage onNavigate={handlePageChange} />
     }
   }
 

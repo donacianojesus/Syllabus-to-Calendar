@@ -13,10 +13,21 @@ const router = express.Router();
  * Upload and parse a syllabus file
  */
 router.post('/', upload.single('syllabus'), async (req, res) => {
+  // Set timeout for large file processing
+  const timeout = setTimeout(() => {
+    if (!res.headersSent) {
+      res.status(408).json({
+        success: false,
+        error: 'Request timeout - file processing took too long',
+      } as ApiResponse<null>);
+    }
+  }, 120000); // 2 minute timeout for LLM processing
+
   try {
     // Validate uploaded file
     const validation = validateUploadedFile(req.file);
     if (!validation.isValid) {
+      clearTimeout(timeout);
       return res.status(400).json({
         success: false,
         error: validation.error,
@@ -57,12 +68,14 @@ router.post('/', upload.single('syllabus'), async (req, res) => {
       case 'docx':
         // For now, return error for DOCX files
         // TODO: Implement DOCX parsing with mammoth
+        clearTimeout(timeout);
         return res.status(400).json({
           success: false,
           error: 'DOCX files are not yet supported. Please convert to PDF or text format.',
         } as ApiResponse<null>);
 
       default:
+        clearTimeout(timeout);
         return res.status(400).json({
           success: false,
           error: 'Unsupported file type',
@@ -71,6 +84,7 @@ router.post('/', upload.single('syllabus'), async (req, res) => {
 
     // Check if the content looks like a syllabus
     if (!parsingMetadata.isLikelySyllabus) {
+      clearTimeout(timeout);
       return res.status(400).json({
         success: false,
         error: 'The uploaded file does not appear to be a syllabus. Please upload a valid course syllabus.',
@@ -87,11 +101,15 @@ router.post('/', upload.single('syllabus'), async (req, res) => {
     );
 
     if (!parsingResult.success) {
+      clearTimeout(timeout);
       return res.status(500).json({
         success: false,
         error: parsingResult.error || 'Failed to parse syllabus',
       } as ApiResponse<null>);
     }
+
+    // Clear timeout since we're responding successfully
+    clearTimeout(timeout);
 
     // Return successful response
     return res.json({
@@ -111,14 +129,23 @@ router.post('/', upload.single('syllabus'), async (req, res) => {
   } catch (error) {
     console.error('Upload error:', error);
     
-    return res.status(500).json({
-      success: false,
-      error: 'Internal server error during file processing',
-      message: process.env.NODE_ENV === 'development' 
-        ? (error instanceof Error ? error.message : 'Unknown error')
-        : 'An error occurred while processing your file',
-    } as ApiResponse<null>);
+    // Clear timeout since we're responding with error
+    clearTimeout(timeout);
+    
+    // Only send response if headers haven't been sent yet
+    if (!res.headersSent) {
+      return res.status(500).json({
+        success: false,
+        error: 'Internal server error during file processing',
+        message: process.env.NODE_ENV === 'development' 
+          ? (error instanceof Error ? error.message : 'Unknown error')
+          : 'An error occurred while processing your file',
+      } as ApiResponse<null>);
+    }
   }
+  
+  // This return statement ensures all code paths return a value
+  return;
 });
 
 /**

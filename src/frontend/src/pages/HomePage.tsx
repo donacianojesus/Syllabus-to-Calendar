@@ -1,7 +1,11 @@
 import React from 'react';
 import { Upload, Calendar, BookOpen } from 'lucide-react';
 
-const HomePage: React.FC = () => {
+interface HomePageProps {
+  onNavigate?: (page: string) => void;
+}
+
+const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   const stats = [
     { label: 'Total Events', value: '0', icon: Calendar },
     { label: 'Courses', value: '0', icon: BookOpen },
@@ -49,7 +53,10 @@ const HomePage: React.FC = () => {
           <p className="text-gray-400 mb-4">
             Upload your PDF or text syllabus to automatically extract assignments, exams, and deadlines.
           </p>
-          <button className="btn-primary">
+          <button 
+            className="btn-primary"
+            onClick={() => onNavigate?.('upload')}
+          >
             Start Upload
           </button>
         </div>
@@ -63,7 +70,10 @@ const HomePage: React.FC = () => {
           <p className="text-gray-400 mb-4">
             View your events in a clean, organized calendar format with filtering and search options.
           </p>
-          <button className="btn-secondary">
+          <button 
+            className="btn-secondary"
+            onClick={() => onNavigate?.('calendar')}
+          >
             Open Calendar
           </button>
         </div>
