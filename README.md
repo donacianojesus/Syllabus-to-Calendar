@@ -627,27 +627,6 @@ You can test with:
 - **Component Library** - Reusable UI components with consistent styling
 - **Visual Polish** - Thin borders, subtle shadows, refined spacing
 
-### **File Upload Interface (In Progress)**
-- [ ] **File Upload Component** - Drag-and-drop with react-dropzone
-- [ ] **File Validation** - Client-side type and size validation
-- [ ] **Progress Indicators** - Upload progress and parsing status
-- [ ] **Error Handling** - User-friendly error messages
-- [ ] **Course Info Form** - Optional course name, code, semester inputs
-
-### **Calendar Display (Planned)**
-- [ ] **Calendar Component** - Monthly/weekly view using react-calendar
-- [ ] **Event Rendering** - Display events with colors by type/priority
-- [ ] **Date Navigation** - Month/week navigation controls
-- [ ] **Event Tooltips** - Hover details for events
-- [ ] **View Toggle** - Switch between list and calendar views
-
-### **Event Management (Planned)**
-- [ ] **Event List View** - Chronological list of all events
-- [ ] **Event Details Modal** - View/edit individual events
-- [ ] **Event Filtering** - Filter by type, course, date range
-- [ ] **Event Search** - Search events by title or description
-- [ ] **Bulk Actions** - Mark multiple events as complete
-
 ## **Contributing**
 
 1. Fork the repository
