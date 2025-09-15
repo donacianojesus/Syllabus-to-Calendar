@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, FileText, X, AlertCircle } from 'lucide-react';
 import { SyllabusUploadResponse } from '../../../shared/types';
+import { uploadSyllabus } from '../utils/api';
 import toast from 'react-hot-toast';
 
 interface FileUploadComponentProps {
@@ -82,19 +83,10 @@ const FileUploadComponent: React.FC<FileUploadComponentProps> = ({
       formData.append('semester', courseInfo.semester);
       formData.append('year', courseInfo.year.toString());
 
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-                const result: SyllabusUploadResponse = await response.json();
+      const result = await uploadSyllabus(formData);
 
       if (result.success) {
-        onUploadSuccess(result);
+        onUploadSuccess(result as SyllabusUploadResponse);
         toast.success('Syllabus uploaded and parsed successfully!');
       } else {
         onUploadError(result.error || 'Upload failed');
@@ -107,7 +99,7 @@ const FileUploadComponent: React.FC<FileUploadComponentProps> = ({
         if (error.message.includes('500')) {
           errorMessage = 'Backend server error - please check if the backend is running';
         } else if (error.message.includes('404')) {
-          errorMessage = 'Backend server not found - please check if the backend is running on port 3002';
+          errorMessage = 'Backend server not found - please check if the backend is running on port 3001';
         } else if (error.message.includes('ECONNREFUSED')) {
           errorMessage = 'Cannot connect to backend server - please start the backend server';
         } else {

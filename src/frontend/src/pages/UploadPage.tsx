@@ -3,7 +3,11 @@ import { FileText, AlertCircle, CheckCircle, Loader } from 'lucide-react';
 import FileUploadComponent from '../components/FileUploadComponent';
 import { SyllabusUploadResponse } from '../../../shared/types';
 
-const UploadPage: React.FC = () => {
+interface UploadPageProps {
+  onUploadSuccess?: (result: SyllabusUploadResponse) => void;
+}
+
+const UploadPage: React.FC<UploadPageProps> = ({ onUploadSuccess }) => {
   const [uploadResult, setUploadResult] = useState<SyllabusUploadResponse | null>(null);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -11,6 +15,11 @@ const UploadPage: React.FC = () => {
     try {
       setUploadResult(result);
       setIsUploading(false);
+      
+      // Call parent callback if provided
+      if (onUploadSuccess) {
+        onUploadSuccess(result);
+      }
     } catch (error) {
       console.error('Error processing upload result:', error);
       handleUploadError('Failed to process upload result');
