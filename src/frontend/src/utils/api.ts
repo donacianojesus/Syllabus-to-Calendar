@@ -2,9 +2,9 @@
 
 // Determine API base URL based on environment
 const getApiBaseUrl = () => {
-  // In production (Vercel), use environment variable or fallback to Railway
+  // In production (Vercel), use environment variable or fallback to Render
   if (import.meta.env.PROD) {
-    return import.meta.env.VITE_API_URL || 'https://your-backend-url.railway.app';
+    return import.meta.env.VITE_API_URL || 'https://syllabus-to-calendar.onrender.com';
   }
   // In development, use relative path (Vite proxy)
   return '/api';

@@ -12,11 +12,11 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "https://your-backend-url.railway.app/api/$1"
+      "dest": "https://syllabus-to-calendar.onrender.com/api/$1"
     },
     {
       "src": "/health",
-      "dest": "https://your-backend-url.railway.app/health"
+      "dest": "https://syllabus-to-calendar.onrender.com/health"
     },
     {
       "src": "/(.*)",
@@ -24,6 +24,6 @@
     }
   ],
   "env": {
-    "VITE_API_URL": "https://your-backend-url.railway.app"
+    "VITE_API_URL": "https://syllabus-to-calendar.onrender.com"
   }
 }
