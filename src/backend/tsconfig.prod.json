@@ -8,10 +8,12 @@
     "strictFunctionTypes": false,
     "noImplicitThis": false,
     "noImplicitReturns": false,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "strict": false
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "node_modules/@types/**/*"
   ],
   "exclude": [
     "node_modules",

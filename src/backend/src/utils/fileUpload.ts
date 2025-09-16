@@ -1,11 +1,11 @@
-import multer from 'multer';
+import multer, { FileFilterCallback } from 'multer';
 import { Request } from 'express';
 import path from 'path';
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
 
-const fileFilter = (req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+const fileFilter = (req: Request, file: any, cb: FileFilterCallback) => {
   // Check file type
   const allowedTypes = ['application/pdf', 'text/plain', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
   const allowedExtensions = ['.pdf', '.txt', '.docx'];
@@ -30,7 +30,7 @@ export const upload = multer({
 });
 
 // File validation utility
-export const validateUploadedFile = (file: Express.Multer.File | undefined): { isValid: boolean; error?: string } => {
+export const validateUploadedFile = (file: any | undefined): { isValid: boolean; error?: string } => {
   if (!file) {
     return { isValid: false, error: 'No file uploaded' };
   }
@@ -55,7 +55,7 @@ export const getFileExtension = (filename: string): string => {
 };
 
 // Determine file type from extension and mimetype
-export const getFileType = (file: Express.Multer.File): 'pdf' | 'text' | 'docx' | 'unknown' => {
+export const getFileType = (file: any): 'pdf' | 'text' | 'docx' | 'unknown' => {
   const extension = getFileExtension(file.originalname);
   const mimetype = file.mimetype.toLowerCase();
 
