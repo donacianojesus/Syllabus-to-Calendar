@@ -544,8 +544,6 @@ The API returns structured data including:
 
 ### Supported Formats
 - **PDF files** (.pdf) - Recommended for best results
-- **Text files** (.txt) - Good for testing parsing logic
-- **Word documents** (.docx) - Planned for future support
 
 ### Test Files
 You can test with:
@@ -557,7 +555,7 @@ You can test with:
 
 **Common Issues:**
 - **"No file uploaded"** - Make sure the file field is named `syllabus`
-- **"Invalid file type"** - Only PDF and TXT files are supported
+- **"Invalid file type"** - Only PDF files are supported
 - **"File size exceeds limit"** - Maximum file size is 10MB
 - **"Multipart: Boundary not found"** - Use proper multipart/form-data format
 
@@ -573,13 +571,6 @@ You can test with:
 4. **Smart Fallback:** If LLM fails, automatically use regex parsing
 5. Return results with parsing method and confidence score
 
-## **Next for Development**
-
-1. **File Upload UI** - Build React component for drag-and-drop upload
-2. **Calendar Display** - Show parsed events in monthly calendar view  
-3. **Event Management** - Edit, delete, and manage calendar events
-4. **Frontend Integration** - Connect React app to backend API
-5. **Activities Panel** - Handle undated events and activities
 
 ### Development Workflow
 1. Fork the repository
@@ -624,7 +615,7 @@ You can test with:
 - **Dark Theme Design System** - `#171514` background with white accents
 - **Sidebar Navigation** - Clean 3-item navigation (Home, Upload, Calendar)
 - **Header Component** - Dynamic titles with action buttons
-- **Home Dashboard** - Stats grid, quick actions, recent activity
+- **Home Dashboard** - Clean interface with quick actions
 - **Responsive Layout** - Mobile-friendly sidebar and main content
 - **Typography System** - Serif headings with sans-serif body text
 - **Component Library** - Reusable UI components with consistent styling
@@ -657,7 +648,6 @@ You can test with:
 - **LLM Integration:** OpenAI GPT-4o with intelligent prompt engineering 
 - **Date Validation:** Handles ambiguous dates and moves them to activities section
 - **Event Classification:** AI-powered categorization and priority assignment
-
 ---
 
 ## **Known Issues**
