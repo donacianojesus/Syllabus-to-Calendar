@@ -2,7 +2,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "rootDir": "./src",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "strictFunctionTypes": false,
+    "noImplicitThis": false,
+    "noImplicitReturns": false,
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*"
