@@ -1,6 +1,16 @@
 // API utility functions for LawBandit Calendar
 
-const API_BASE_URL = '/api'; // Using Vite proxy to forward to backend
+// Determine API base URL based on environment
+const getApiBaseUrl = () => {
+  // In production (Vercel), use environment variable or fallback to Railway
+  if (import.meta.env.PROD) {
+    return import.meta.env.VITE_API_URL || 'https://your-backend-url.railway.app';
+  }
+  // In development, use relative path (Vite proxy)
+  return '/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export interface ApiResponse<T> {
   success: boolean;
@@ -62,7 +72,10 @@ export async function uploadSyllabus(formData: FormData): Promise<UploadResponse
  */
 export async function checkHealth(): Promise<boolean> {
   try {
-    const response = await fetch('/health');
+    const healthUrl = import.meta.env.PROD 
+      ? `${API_BASE_URL}/health`
+      : '/health';
+    const response = await fetch(healthUrl);
     return response.ok;
   } catch (error) {
     console.error('Health check error:', error);

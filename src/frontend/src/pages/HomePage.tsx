@@ -1,5 +1,5 @@
 import React from 'react';
-import { Upload, Calendar, BookOpen } from 'lucide-react';
+import { Upload, Calendar } from 'lucide-react';
 
 interface HomePageProps {
   onNavigate?: (page: string) => void;

@@ -5,7 +5,7 @@ import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
 import UploadPage from './pages/UploadPage'
 import CalendarPage from './pages/CalendarPage'
-import { CalendarEvent } from '../shared/types'
+import { CalendarEvent } from '../../shared/types'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
