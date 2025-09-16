@@ -4,7 +4,7 @@ import { PdfParserService } from '../services/pdfParser';
 import { TextParserService } from '../services/textParser';
 import { SyllabusParserService } from '../services/syllabusParser';
 import { LLMParserService } from '../services/llmParser';
-import { ApiResponse, ParsedSyllabus } from '../../../shared/types';
+import { ApiResponse, ParsedSyllabus } from '../types/shared';
 
 const router = express.Router();
 

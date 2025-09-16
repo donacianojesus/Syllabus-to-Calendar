@@ -1,5 +1,5 @@
 const OpenAI = require('openai');
-import { CalendarEvent, EventType, Priority, ParsedSyllabus } from '../../../shared/types';
+import { CalendarEvent, EventType, Priority, ParsedSyllabus } from '../types/shared';
 import { LLMParsedSyllabus, LLMAssignment, LLMExam, LLMActivity, LLM_SCHEMA } from '../types/llm-schema';
 
 export interface LLMParsingResult {

@@ -1,4 +1,4 @@
-import { CalendarEvent, EventType, Priority, ParsedSyllabus } from '../../../shared/types';
+import { CalendarEvent, EventType, Priority, ParsedSyllabus } from '../types/shared';
 import { DateParserService, DateParseResult } from '../utils/dateParser';
 import { LLMParserService, LLMParsingResult } from './llmParser';
 
