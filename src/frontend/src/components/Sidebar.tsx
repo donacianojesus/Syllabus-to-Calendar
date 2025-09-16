@@ -45,17 +45,6 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onPageChange }) => {
         })}
       </nav>
 
-      {/* User Profile */}
-      <div className="p-4 border-t border-gray-700">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-            <span className="text-gray-900 font-bold">N/A</span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-white font-medium truncate">User</p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

@@ -6,11 +6,6 @@ interface HomePageProps {
 }
 
 const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
-  const stats = [
-    { label: 'Total Events', value: '0', icon: Calendar },
-    { label: 'Courses', value: '0', icon: BookOpen },
-    { label: 'Files Uploaded', value: '0', icon: Upload },
-  ];
 
   return (
     <div className="space-y-8">
@@ -24,23 +19,6 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         </p>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {stats.map((stat, index) => {
-          const Icon = stat.icon;
-          return (
-            <div key={index} className="card-lawbandit">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-2xl font-bold text-white">{stat.value}</p>
-                  <p className="text-lawbandit-muted">{stat.label}</p>
-                </div>
-                <Icon className="w-8 h-8 text-white" />
-              </div>
-            </div>
-          );
-        })}
-      </div>
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -51,7 +29,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             <h3 className="text-xl font-bold text-white">Upload Syllabus</h3>
           </div>
           <p className="text-gray-400 mb-4">
-            Upload your PDF or text syllabus to automatically extract assignments, exams, and deadlines.
+            Upload your PDF syllabus to automatically extract assignments, exams, and deadlines.
           </p>
           <button 
             className="btn-primary"
@@ -79,20 +57,6 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* Recent Activity */}
-      <div className="card">
-        <h3 className="text-xl font-bold text-white mb-4">Recent Activity</h3>
-        <div className="space-y-3">
-          <div className="flex items-center space-x-3 text-gray-400">
-            <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
-            <span>No recent activity</span>
-          </div>
-          <div className="flex items-center space-x-3 text-gray-400">
-            <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
-            <span>Upload your first syllabus to get started</span>
-          </div>
-        </div>
-      </div>
     </div>
   );
 };

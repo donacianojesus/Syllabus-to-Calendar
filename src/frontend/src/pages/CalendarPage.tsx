@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, BookOpen, FileText, AlertCircle, CheckCircle } from 'lucide-react';
+import { Calendar, Clock, BookOpen, FileText, AlertCircle, CheckCircle, List, Grid3X3 } from 'lucide-react';
 import CalendarComponent from '../components/Calendar';
+import ListView from '../components/ListView';
 import { CalendarEvent, EventType, Priority } from '../../../shared/types';
 import { format, isSameDay } from 'date-fns';
 
@@ -13,6 +14,8 @@ interface CalendarPageProps {
     year?: number;
   };
 }
+
+type ViewMode = 'calendar' | 'list';
 
 // Utility function to get the appropriate start month based on semester
 const getSemesterStartMonth = (semester?: string, year?: number): Date => {
@@ -53,6 +56,8 @@ const CalendarPage: React.FC<CalendarPageProps> = ({
     getSemesterStartMonth(courseInfo?.semester, courseInfo?.year)
   );
   const [selectedEvents, setSelectedEvents] = useState<CalendarEvent[]>([]);
+  const [viewMode, setViewMode] = useState<ViewMode>('calendar');
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
 
   // Update selected events when date changes
   useEffect(() => {
@@ -130,7 +135,7 @@ const CalendarPage: React.FC<CalendarPageProps> = ({
       {/* Header */}
       <div className="text-center">
         <h2 className="text-4xl font-bold text-white mb-4">
-          Calendar View
+          {viewMode === 'calendar' ? 'Calendar View' : 'Event List'}
         </h2>
         {courseInfo && (
           <div className="text-gray-400 text-lg">
@@ -140,142 +145,173 @@ const CalendarPage: React.FC<CalendarPageProps> = ({
             )}
           </div>
         )}
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Calendar */}
-        <div className="lg:col-span-2">
-          <div className="card">
-            <CalendarComponent
-              events={events}
-              onDateSelect={setSelectedDate}
-              selectedDate={selectedDate}
-              value={selectedDate}
-            />
+        
+        {/* View Toggle Buttons */}
+        <div className="flex justify-center mt-6">
+          <div className="bg-gray-800 rounded-lg p-1 flex">
+            <button
+              onClick={() => setViewMode('calendar')}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-all duration-200 ${
+                viewMode === 'calendar'
+                  ? 'bg-blue-600 text-white'
+                  : 'text-gray-400 hover:text-white hover:bg-gray-700'
+              }`}
+            >
+              <Grid3X3 className="w-4 h-4" />
+              <span>Calendar</span>
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-md transition-all duration-200 ${
+                viewMode === 'list'
+                  ? 'bg-blue-600 text-white'
+                  : 'text-gray-400 hover:text-white hover:bg-gray-700'
+              }`}
+            >
+              <List className="w-4 h-4" />
+              <span>List</span>
+            </button>
           </div>
         </div>
 
-        {/* Event Details Sidebar */}
-        <div className="space-y-6">
-          {/* Selected Date Events */}
-          <div className="card">
-            <h3 className="text-xl font-bold text-white mb-4">
-              {format(selectedDate, 'EEEE, MMMM d, yyyy')}
-            </h3>
-            
-            {selectedEvents.length > 0 ? (
-              <div className="space-y-3">
-                {selectedEvents.map((event) => (
-                  <div key={event.id} className="bg-gray-800 rounded-lg p-4">
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="flex items-center space-x-2">
-                        {getEventTypeIcon(event.type)}
-                        <h4 className="text-white font-medium">{event.title}</h4>
-                      </div>
-                      {event.completed && (
-                        <CheckCircle className="w-5 h-5 text-green-400" />
-                      )}
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-400 text-sm capitalize">
-                        {event.type}
-                      </span>
-                      {getPriorityBadge(event.priority)}
-                    </div>
-                    
-                    {event.description && (
-                      <p className="text-gray-300 text-sm mt-2">{event.description}</p>
-                    )}
-                    
-                    {event.time && (
-                      <p className="text-gray-400 text-sm mt-1">
-                        <Clock className="w-3 h-3 inline mr-1" />
-                        {event.time}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-400 text-center py-8">No events on this date</p>
-            )}
-          </div>
+        {/* Info Note */}
+        <div className="text-center mt-4">
+          <p className="text-gray-400 text-sm">
+            {viewMode === 'calendar' 
+              ? 'Calendar view shows only events with specific dates. Activities without dates are not displayed.'
+              : 'List view shows all events including activities without specific dates.'
+            }
+          </p>
+        </div>
+      </div>
 
-          {/* Month Summary */}
-          <div className="card">
-            <h3 className="text-xl font-bold text-white mb-4">This Month</h3>
-            
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-white">{currentMonthEvents.length}</p>
-                  <p className="text-gray-400 text-sm">Total Events</p>
-                </div>
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-blue-400">
-                    {currentMonthEvents.filter(e => e.type === EventType.ASSIGNMENT).length}
-                  </p>
-                  <p className="text-gray-400 text-sm">Assignments</p>
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-400 text-sm">Exams</span>
-                  <span className="text-red-400 font-medium">
-                    {currentMonthEvents.filter(e => e.type === EventType.EXAM).length}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-400 text-sm">Readings</span>
-                  <span className="text-green-400 font-medium">
-                    {currentMonthEvents.filter(e => e.type === EventType.READING).length}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-400 text-sm">Deadlines</span>
-                  <span className="text-orange-400 font-medium">
-                    {currentMonthEvents.filter(e => e.type === EventType.DEADLINE).length}
-                  </span>
-                </div>
-              </div>
+      {/* Main Content Area */}
+      {viewMode === 'calendar' ? (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Calendar */}
+          <div className="lg:col-span-2">
+            <div className="card">
+              <CalendarComponent
+                events={events}
+                onDateSelect={setSelectedDate}
+                selectedDate={selectedDate}
+                value={selectedDate}
+              />
             </div>
           </div>
 
-          {/* Upcoming Events */}
-          <div className="card">
-            <h3 className="text-xl font-bold text-white mb-4">Upcoming</h3>
-            
-            {events.length > 0 ? (
-              <div className="space-y-2">
-                {events
-                  .filter(event => new Date(event.date) >= new Date())
-                  .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
-                  .slice(0, 5)
-                  .map((event) => (
-                    <div key={event.id} className="flex items-center justify-between py-2 border-b border-gray-700 last:border-b-0">
-                      <div className="flex items-center space-x-2">
-                        {getEventTypeIcon(event.type)}
-                        <div>
-                          <p className="text-white text-sm font-medium">{event.title}</p>
-                          <p className="text-gray-400 text-xs">
-                            {new Date(event.date).getFullYear() === 2099 ? 'Activity' : format(new Date(event.date), 'MMM d')}
-                          </p>
+          {/* Event Details Sidebar */}
+          <div className="space-y-6">
+            {/* Selected Date Events */}
+            <div className="card">
+              <h3 className="text-xl font-bold text-white mb-4">
+                {format(selectedDate, 'EEEE, MMMM d, yyyy')}
+              </h3>
+              
+              {selectedEvents.length > 0 ? (
+                <div className="space-y-3">
+                  {selectedEvents.map((event) => (
+                    <div key={event.id} className="bg-gray-800 rounded-lg p-4">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex items-center space-x-2">
+                          {getEventTypeIcon(event.type)}
+                          <h4 className="text-white font-medium">{event.title}</h4>
                         </div>
+                        {event.completed && (
+                          <CheckCircle className="w-5 h-5 text-green-400" />
+                        )}
                       </div>
-                      <span className={`text-xs ${getPriorityColor(event.priority)}`}>
-                        {event.priority || 'low'}
-                      </span>
+                      
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-400 text-sm capitalize">
+                          {event.type}
+                        </span>
+                        {getPriorityBadge(event.priority)}
+                      </div>
+                      
+                      {event.description && (
+                        <p className="text-gray-300 text-sm mt-2">{event.description}</p>
+                      )}
+                      
+                      {event.time && (
+                        <p className="text-gray-400 text-sm mt-1">
+                          <Clock className="w-3 h-3 inline mr-1" />
+                          {event.time}
+                        </p>
+                      )}
                     </div>
                   ))}
+                </div>
+              ) : (
+                <p className="text-gray-400 text-center py-8">No events on this date</p>
+              )}
+            </div>
+
+            {/* Month Summary */}
+            <div className="card">
+              <h3 className="text-xl font-bold text-white mb-4">This Month</h3>
+              
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center">
+                    <p className="text-2xl font-bold text-white">{currentMonthEvents.length}</p>
+                    <p className="text-gray-400 text-sm">Total Events</p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-2xl font-bold text-blue-400">
+                      {currentMonthEvents.filter(e => e.type === EventType.ASSIGNMENT).length}
+                    </p>
+                    <p className="text-gray-400 text-sm">Assignments</p>
+                  </div>
+                </div>
               </div>
-            ) : (
-              <p className="text-gray-400 text-center py-4">No events scheduled</p>
-            )}
+            </div>
+
+            {/* Upcoming Events */}
+            <div className="card">
+              <h3 className="text-xl font-bold text-white mb-4">Upcoming</h3>
+              
+              {events.length > 0 ? (
+                <div className="space-y-2">
+                  {events
+                    .filter(event => new Date(event.date) >= new Date())
+                    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                    .slice(0, 5)
+                    .map((event) => (
+                      <div key={event.id} className="flex items-center justify-between py-2 border-b border-gray-700 last:border-b-0">
+                        <div className="flex items-center space-x-2">
+                          {getEventTypeIcon(event.type)}
+                          <div>
+                            <p className="text-white text-sm font-medium">{event.title}</p>
+                            <p className="text-gray-400 text-xs">
+                              {new Date(event.date).getFullYear() === 2099 ? 'Activity' : format(new Date(event.date), 'MMM d')}
+                            </p>
+                          </div>
+                        </div>
+                        <span className={`text-xs ${getPriorityColor(event.priority)}`}>
+                          {event.priority || 'low'}
+                        </span>
+                      </div>
+                    ))}
+                </div>
+              ) : (
+                <p className="text-gray-400 text-center py-4">No events scheduled</p>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        /* List View */
+        <div className="max-w-6xl mx-auto">
+          <div className="card">
+            <ListView
+              events={events}
+              onEventSelect={setSelectedEvent}
+              selectedEvent={selectedEvent || undefined}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 # LawBandit Calendar 
 
-**Status:** **IN DEVELOPMENT** - Complete AI-powered syllabus parsing with interactive calendar  
+**Status:** **COMPLETE** - Complete AI-powered syllabus parsing with interactive calendar  
 **Frontend:** Implemented with calendar display, auto-navigation, and responsive design  
 **Latest Update:** Complete end-to-end workflow with smart calendar auto-navigation
 
@@ -33,16 +33,20 @@ The parser now **consistently extracts specific assignments, readings, and exams
 - **Responsive Layout** - Mobile-friendly sidebar and main content area
 - **File Upload Interface** - Drag-and-drop with validation and progress indicators
 - **Interactive Calendar** - Monthly view with event visualization and navigation
+- **List View Toggle** - Switch between calendar and list views with sorting options
 - **Smart Auto-Navigation** - Calendar automatically opens to correct semester/month
 - **Event Visualization** - Color-coded dots, detailed event display, and priority indicators
 - **Activity Management** - Clean display of activities without specific dates
+- **Activity Filtering** - Activities automatically excluded from calendar view
+- **PDF-Only Support** - Clear specification that only PDF files are supported
+- **Clean UI Design** - Streamlined interface without unnecessary elements
 - **Typography System** - Serif headings with sans-serif body text
 - **Component Library** - Reusable UI components with consistent styling
 - **Visual Polish** - Thin borders, subtle shadows, and refined spacing
 
 ## Overview
 
-LawBandit Calendar is a web application that automatically parses law school syllabi and converts them into an interactive calendar. Simply upload your syllabus (PDF or text format), and the app will extract all important dates, assignments, and exams, presenting them in an easy-to-use calendar interface.
+LawBandit Calendar is a web application that automatically parses law school syllabi and converts them into an interactive calendar. Simply upload your PDF syllabus, and the app will extract all important dates, assignments, and exams, presenting them in an easy-to-use calendar interface with both calendar and list views.
 
 ## Features 
 
@@ -64,14 +68,17 @@ LawBandit Calendar is a web application that automatically parses law school syl
 ### **Completed Features**
 - **File Upload Interface:** Drag-and-drop with react-dropzone, validation, and progress indicators
 - **Calendar Display:** Monthly view using react-calendar with event rendering and navigation
+- **List View Toggle:** Switch between calendar and list views for events with sorting options
 - **Event Visualization:** Color-coded event dots, detailed event information, and priority display
 - **Smart Calendar Navigation:** Auto-navigates to correct semester (Spring→January, Fall→August, etc.)
 - **Activity Management:** Clean display of activities without specific dates (shows "Activity" instead of placeholder dates)
+- **Activity Filtering:** Activities automatically excluded from calendar view, shown only in list view
+- **PDF-Only Support:** Clear specification that only PDF files are supported
+- **Clean UI Design:** Removed stats boxes and user profile section for streamlined interface
 - **API Integration:** Seamless frontend-backend communication with error handling
 - **Responsive Design:** Mobile-friendly layout with professional dark theme
 
 ### **Planned Enhancements**
-- **List View Toggle:** Switch between calendar and list views for events
 - **Google Calendar Integration:** Sync events directly to Google Calendar
 - **Event Management:** Edit, delete, and mark events as complete
 - **Export Options:** Download calendar as PDF or export to other formats
@@ -157,15 +164,15 @@ The parser now **consistently extracts specific assignments from any syllabus fo
 
 3. **Upload a syllabus:**
    - Navigate to Upload page
-   - Drag and drop a PDF or text file
+   - Drag and drop a PDF file
    - Fill in course information
-   - View parsed events in the calendar
+   - View parsed events in calendar or list view
 
 ### **Demo Workflow**
-1. **Upload** → Any syllabus file (PDF/text)
+1. **Upload** → PDF syllabus file
 2. **Parse** → AI extracts assignments, exams, readings
 3. **Navigate** → Calendar auto-opens to correct semester
-4. **Visualize** → Color-coded events with detailed information
+4. **Visualize** → Switch between calendar and list views
 5. **Manage** → View upcoming events and activity summaries
 
 ### Technical Stack
@@ -196,15 +203,18 @@ PDF parsing library (pdf-parse) is still available for initial testing, but the 
 **Core Features Complete:**
 - Universal syllabus parsing (any format)
 - Interactive calendar with event visualization
+- List view toggle with sorting options
+- Activity filtering (activities excluded from calendar)
+- PDF-only file support
 - Smart auto-navigation based on semester
 - Professional responsive UI
 - Seamless API integration
 
 **Next Additions: Enhanced Features**
-- **List View Toggle** - Alternative event display format for better task management
 - **Google Calendar Integration** - Direct sync to Google Calendar for external access
 - **Advanced Event Management** - Edit, delete, and mark events as complete
 - **Export and Sharing** - PDF export and calendar sharing capabilities
+- **Multiple Syllabus Support** - Handle multiple courses simultaneously
 
 **Technical Achievements:**
 - 95%+ parsing accuracy across different syllabus formats

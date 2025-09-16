@@ -37,9 +37,7 @@ const FileUploadComponent: React.FC<FileUploadComponentProps> = ({
   const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
     onDrop,
     accept: {
-      'application/pdf': ['.pdf'],
-      'text/plain': ['.txt'],
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx']
+      'application/pdf': ['.pdf']
     },
     maxFiles: 1,
     maxSize: 10 * 1024 * 1024, // 10MB
@@ -151,7 +149,7 @@ const FileUploadComponent: React.FC<FileUploadComponentProps> = ({
               <p className="text-white text-lg mb-2">Drag & drop your syllabus here</p>
               <p className="text-gray-400">or click to browse files</p>
               <p className="text-gray-500 text-sm mt-2">
-                Supports PDF, TXT, and DOCX files (max 10MB)
+                Supports PDF files only (max 10MB)
               </p>
             </div>
           )}

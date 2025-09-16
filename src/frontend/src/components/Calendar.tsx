@@ -19,11 +19,20 @@ const CalendarComponent: React.FC<CalendarProps> = ({
 }) => {
 
   // Group events by date for efficient rendering
+  // Filter out activities (OTHER events with placeholder dates from 2099)
   const eventsByDate = useMemo(() => {
     const grouped: { [key: string]: CalendarEvent[] } = {};
     
     events.forEach(event => {
-      const dateKey = format(new Date(event.date), 'yyyy-MM-dd');
+      const eventDate = new Date(event.date);
+      const isPlaceholderDate = eventDate.getFullYear() === 2099;
+      
+      // Skip activities (OTHER events with placeholder dates) from calendar view
+      if (event.type === EventType.OTHER && isPlaceholderDate) {
+        return;
+      }
+      
+      const dateKey = format(eventDate, 'yyyy-MM-dd');
       if (!grouped[dateKey]) {
         grouped[dateKey] = [];
       }

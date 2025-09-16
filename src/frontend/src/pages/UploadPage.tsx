@@ -53,7 +53,7 @@ const UploadPage: React.FC<UploadPageProps> = ({ onUploadSuccess }) => {
           Upload Syllabus
         </h2>
         <p className="text-gray-400 text-lg">
-          Upload your PDF or text syllabus to automatically extract assignments, exams, and deadlines
+          Upload your PDF syllabus to automatically extract assignments, exams, and deadlines
         </p>
       </div>
 
@@ -287,20 +287,13 @@ const UploadPage: React.FC<UploadPageProps> = ({ onUploadSuccess }) => {
 
       {/* Help Section */}
       <div className="card max-w-4xl mx-auto">
-        <h3 className="text-xl font-bold text-white mb-4">Supported Formats</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <h3 className="text-xl font-bold text-white mb-4">Supported Format</h3>
+        <div className="grid grid-cols-1 gap-6">
           <div className="flex items-start space-x-3">
             <FileText className="w-6 h-6 text-blue-400 mt-1" />
             <div>
               <h4 className="text-white font-medium">PDF Files</h4>
-              <p className="text-gray-400 text-sm">Upload PDF syllabi for best parsing results</p>
-            </div>
-          </div>
-          <div className="flex items-start space-x-3">
-            <FileText className="w-6 h-6 text-green-400 mt-1" />
-            <div>
-              <h4 className="text-white font-medium">Text Files</h4>
-              <p className="text-gray-400 text-sm">Plain text files with syllabus content</p>
+              <p className="text-gray-400 text-sm">Upload PDF syllabi for parsing results</p>
             </div>
           </div>
         </div>
