@@ -7,9 +7,45 @@
       "config": {
         "distDir": "dist"
       }
+    },
+    {
+      "src": "api/hello.ts",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/health.ts",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/test.ts",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/upload.ts",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/upload-info.ts",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/parse-status.ts",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
+    {
+      "src": "/api/upload/info",
+      "dest": "/api/upload-info"
+    },
+    {
+      "src": "/api/parse/status",
+      "dest": "/api/parse-status"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
     {
       "src": "/(.*)",
       "dest": "/index.html"
