@@ -7,13 +7,13 @@
       "config": {
         "distDir": "dist"
       }
-    },
-    {
-      "src": "api/**/*.ts",
-      "use": "@vercel/node"
     }
   ],
   "routes": [
+    {
+      "src": "/api/upload",
+      "dest": "/api/upload-simple"
+    },
     {
       "src": "/api/(.*)",
       "dest": "/api/$1"

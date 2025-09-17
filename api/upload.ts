@@ -62,12 +62,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // Parse multipart form data
+    // For Vercel, we need to handle multipart form data differently
+    // The file data comes in req.body as a parsed object
     const formData = req.body;
     
-    // For Vercel, we need to handle the file differently
-    // The file will be in req.body as a buffer or base64 string
-    if (!formData.syllabus) {
+    // Check if we have the file data
+    if (!formData || !formData.syllabus) {
       return res.status(400).json({
         success: false,
         error: 'No file uploaded'
