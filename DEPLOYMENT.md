@@ -1,60 +1,81 @@
 # 🚀 Deployment Guide for LawBandit Calendar
 
-## Quick Deploy to Vercel
+## Quick Deploy to Vercel (Full-Stack)
 
 ### Prerequisites
 - GitHub repository with your code
 - Vercel account (free)
-- Railway account (free) for backend hosting
+- OpenAI API key (optional, for LLM parsing)
 
-## Step 1: Deploy Backend to Railway
+## Single-Step Deployment: Everything on Vercel
 
-1. **Connect Railway to GitHub:**
-   - Go to [Railway.app](https://railway.app)
-   - Sign up with GitHub
-   - Create new project from GitHub repo
+**YES! You can deploy both frontend and backend on Vercel!** This is the recommended approach.
 
-2. **Configure Backend:**
-   - Select `src/backend` as root directory
-   - Set build command: `npm install && npm run build`
-   - Set start command: `npm start`
-   - Add environment variables:
-     ```
-     PORT=3000
-     OPENAI_API_KEY=your_openai_api_key
-     ```
-
-3. **Deploy:**
-   - Railway will automatically deploy your backend
-   - Note the generated URL (e.g., `https://your-app-name.railway.app`)
-
-## Step 2: Deploy Frontend to Vercel
+### Step 1: Deploy to Vercel
 
 1. **Connect Vercel to GitHub:**
    - Go to [Vercel.com](https://vercel.com)
    - Sign up with GitHub
    - Import your repository
 
-2. **Configure Frontend:**
-   - Set root directory: `src/frontend`
-   - Add environment variable:
+2. **Configure Environment Variables:**
+   - Add these environment variables in Vercel dashboard:
      ```
-     VITE_API_URL=https://your-backend-url.railway.app
+     OPENAI_API_KEY=your_openai_api_key_here
+     ENABLE_LLM_PARSING=true
+     LLM_MODEL=gpt-4o-mini
+     LLM_MAX_TOKENS=10000
+     LLM_TEMPERATURE=0.1
      ```
-   - Replace with your actual Railway backend URL
 
 3. **Deploy:**
-   - Vercel will automatically build and deploy
+   - Vercel will automatically detect the configuration
+   - Frontend builds from `src/frontend`
+   - API functions deploy from `api/` directory
    - Your app will be live at `https://your-app.vercel.app`
 
-## Step 3: Test Your Deployment
+### Step 2: Test Your Deployment
 
 1. **Visit your Vercel URL**
 2. **Upload a test syllabus** (PDF file)
 3. **Verify calendar display** works correctly
 4. **Test with different syllabus formats**
 
-## Alternative Backend Hosting
+## How It Works
+
+### Vercel Configuration
+- **Frontend**: Static build from `src/frontend` (React + Vite)
+- **Backend**: Serverless functions in `api/` directory
+- **Routing**: `vercel.json` handles API routes and frontend routing
+- **Environment**: All environment variables managed in Vercel dashboard
+
+### API Endpoints Available
+- `POST /api/upload` - Upload and parse syllabus files
+- `GET /api/upload/info` - Get upload requirements
+- `POST /api/parse/llm` - Direct LLM parsing
+- `POST /api/parse/compare` - Compare LLM vs regex parsing
+- `GET /api/parse/status` - Get parsing service status
+- `GET /api/health` - Health check
+- `GET /api` - API information
+
+## Environment Variables
+
+### Required (Vercel Environment Variables)
+```
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+### Optional (Vercel Environment Variables)
+```
+ENABLE_LLM_PARSING=true
+LLM_MODEL=gpt-4o-mini
+LLM_MAX_TOKENS=10000
+LLM_TEMPERATURE=0.1
+```
+
+## Alternative: Separate Backend Hosting
+
+If you prefer to keep the backend separate, you can still use:
 
 ### Option A: Render.com
 1. Create new Web Service
@@ -64,25 +85,33 @@
 5. Start command: `npm start`
 6. Add environment variables
 
-### Option B: Heroku
+### Option B: Railway
+1. Go to [Railway.app](https://railway.app)
+2. Sign up with GitHub
+3. Create new project from GitHub repo
+4. Select `src/backend` as root directory
+5. Add environment variables
+
+### Option C: Heroku
 1. Create new Heroku app
 2. Connect GitHub repository
 3. Set buildpack: Node.js
 4. Set root directory: `src/backend`
 5. Add environment variables
 
-## Environment Variables
-
-### Backend (.env)
-```
-PORT=3000
-OPENAI_API_KEY=your_openai_api_key_here
-NODE_ENV=production
-```
-
-### Frontend (Vercel Environment Variables)
-```
-VITE_API_URL=https://your-backend-url.railway.app
+Then update `vercel.json` to route API calls to your external backend:
+```json
+{
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "https://your-backend-url.com/api/$1"
+    }
+  ],
+  "env": {
+    "VITE_API_URL": "https://your-backend-url.com"
+  }
+}
 ```
 
 ## Testing Different Syllabi

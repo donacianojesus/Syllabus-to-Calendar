@@ -7,16 +7,20 @@
       "config": {
         "distDir": "dist"
       }
+    },
+    {
+      "src": "api/**/*.ts",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "https://syllabus-to-calendar.onrender.com/api/$1"
+      "dest": "/api/$1"
     },
     {
       "src": "/health",
-      "dest": "https://syllabus-to-calendar.onrender.com/health"
+      "dest": "/api/health"
     },
     {
       "src": "/(.*)",
@@ -24,6 +28,6 @@
     }
   ],
   "env": {
-    "VITE_API_URL": "https://syllabus-to-calendar.onrender.com"
+    "VITE_API_URL": ""
   }
 }
