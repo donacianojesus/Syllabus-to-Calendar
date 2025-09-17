@@ -4,7 +4,7 @@
 const getApiBaseUrl = () => {
   // In production (Vercel), use environment variable or fallback to Render
   if (import.meta.env.PROD) {
-    return import.meta.env.VITE_API_URL || 'https://syllabus-to-calendar.onrender.com';
+    return import.meta.env.VITE_API_URL || 'https://nodejs-serverless-function-express-seven-mu-37.vercel.app';
   }
   // In development, use relative path (Vite proxy)
   return '/api';
