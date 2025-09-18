@@ -1,6 +1,6 @@
 import express from 'express';
 import GoogleCalendarService, { GoogleCalendarSyncResult } from '../services/googleCalendarService';
-import { CalendarEvent } from '../../../shared/types';
+import { CalendarEvent } from '../types/shared';
 
 const router = express.Router();
 let googleCalendarService: GoogleCalendarService;
@@ -20,7 +20,7 @@ const getGoogleCalendarService = () => {
 router.get('/auth-url', (req, res) => {
   try {
     const authUrl = getGoogleCalendarService().getAuthUrl();
-    res.json({
+    return res.json({
       success: true,
       data: {
         authUrl
@@ -28,7 +28,7 @@ router.get('/auth-url', (req, res) => {
     });
   } catch (error) {
     console.error('Error generating auth URL:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       error: 'Failed to generate authorization URL'
     });

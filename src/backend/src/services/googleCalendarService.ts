@@ -1,6 +1,6 @@
 import { google } from 'googleapis';
 import { OAuth2Client } from 'google-auth-library';
-import { CalendarEvent, EventType, Priority } from '../../../shared/types';
+import { CalendarEvent, EventType, Priority } from '../types/shared';
 
 export interface GoogleCalendarEvent {
   summary: string;
