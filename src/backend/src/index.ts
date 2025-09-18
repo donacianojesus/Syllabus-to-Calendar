@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import uploadRouter from './routes/upload';
+import googleCalendarRouter from './routes/googleCalendar';
 
 // Load environment variables
 dotenv.config();
@@ -30,6 +31,7 @@ app.get('/health', (req, res) => {
 // API routes
 app.use('/api/upload', uploadRouter);
 app.use('/api/parse', uploadRouter);
+app.use('/api/google-calendar', googleCalendarRouter);
 
 app.get('/api', (req, res) => {
   res.json({ 
@@ -42,7 +44,16 @@ app.get('/api', (req, res) => {
       parseLLM: '/api/parse/llm (POST)',
       parseCompare: '/api/parse/compare (POST)',
       parseStatus: '/api/parse/status (GET)',
-      events: '/api/events (GET, POST, PUT, DELETE)'
+      events: '/api/events (GET, POST, PUT, DELETE)',
+      googleCalendar: {
+        authUrl: '/api/google-calendar/auth-url (GET)',
+        authCallback: '/api/google-calendar/auth-callback (POST)',
+        setCredentials: '/api/google-calendar/set-credentials (POST)',
+        syncEvents: '/api/google-calendar/sync-events (POST)',
+        calendars: '/api/google-calendar/calendars (GET)',
+        createCalendar: '/api/google-calendar/create-calendar (POST)',
+        status: '/api/google-calendar/status (GET)'
+      }
     }
   });
 });
