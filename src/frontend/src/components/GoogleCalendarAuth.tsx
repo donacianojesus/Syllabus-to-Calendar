@@ -66,11 +66,17 @@ const GoogleCalendarAuth: React.FC<GoogleCalendarAuthProps> = ({
 
       // Listen for the popup to close or receive a message
       const checkClosed = setInterval(() => {
-        if (popup.closed) {
-          clearInterval(checkClosed);
-          setIsLoading(false);
-          // Check if authentication was successful
-          checkAuthStatus();
+        try {
+          if (popup.closed) {
+            clearInterval(checkClosed);
+            setIsLoading(false);
+            // Check if authentication was successful
+            checkAuthStatus();
+          }
+        } catch (error) {
+          // Handle Cross-Origin-Opener-Policy errors
+          console.warn('Cannot check popup status due to CORS policy:', error);
+          // Continue checking - the popup might still be open
         }
       }, 1000);
 
@@ -80,6 +86,7 @@ const GoogleCalendarAuth: React.FC<GoogleCalendarAuthProps> = ({
         
         if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
           clearInterval(checkClosed);
+          clearTimeout(timeout);
           popup.close();
           window.removeEventListener('message', messageListener);
           setIsLoading(false);
@@ -88,6 +95,7 @@ const GoogleCalendarAuth: React.FC<GoogleCalendarAuthProps> = ({
           handleAuthSuccess(event.data.tokens);
         } else if (event.data.type === 'GOOGLE_AUTH_ERROR') {
           clearInterval(checkClosed);
+          clearTimeout(timeout);
           popup.close();
           window.removeEventListener('message', messageListener);
           setIsLoading(false);
@@ -96,6 +104,17 @@ const GoogleCalendarAuth: React.FC<GoogleCalendarAuthProps> = ({
       };
 
       window.addEventListener('message', messageListener);
+
+      // Set a timeout to close the popup after 5 minutes
+      const timeout = setTimeout(() => {
+        clearInterval(checkClosed);
+        window.removeEventListener('message', messageListener);
+        if (!popup.closed) {
+          popup.close();
+        }
+        setIsLoading(false);
+        toast.error('Authentication timed out. Please try again.');
+      }, 5 * 60 * 1000); // 5 minutes
 
     } catch (error) {
       console.error('Error during authentication:', error);
