@@ -73,7 +73,7 @@ const FileUploadComponent: React.FC<FileUploadComponentProps> = ({
 
     try {
       const formData = new FormData();
-      formData.append('syllabus', selectedFile);
+      formData.append('file', selectedFile);
       
       // Always append course information (now required)
       formData.append('courseName', courseInfo.courseName);
