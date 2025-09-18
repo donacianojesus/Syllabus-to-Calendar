@@ -49,7 +49,7 @@ const GoogleAuthCallback: React.FC = () => {
           setMessage('Successfully authenticated with Google Calendar!');
           
           // Notify parent window
-          if (window.opener) {
+          if (window.opener && response.data) {
             window.opener.postMessage({
               type: 'GOOGLE_AUTH_SUCCESS',
               tokens: response.data.tokens

@@ -22,7 +22,7 @@ export interface GoogleCalendarTokensResponse {
 
 export interface GoogleCalendarSyncResponse {
   success: boolean;
-  data: {
+  data?: {
     syncedEvents: number;
     failedEvents: number;
     errors: string[];
@@ -42,7 +42,7 @@ export interface GoogleCalendarStatusResponse {
 
 export interface GoogleCalendarListResponse {
   success: boolean;
-  data: {
+  data?: {
     calendars: any[];
   };
   error?: string;
