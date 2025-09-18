@@ -27,7 +27,7 @@ const GoogleCalendarAuth: React.FC<GoogleCalendarAuthProps> = ({
       setIsCheckingStatus(true);
       const response = await googleCalendarApi.getStatus();
       
-      if (response.success) {
+      if (response.success && response.data) {
         setIsAuthenticated(response.data.authenticated);
         onAuthenticated?.(response.data.authenticated);
       } else {

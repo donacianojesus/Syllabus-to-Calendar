@@ -5,7 +5,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 export interface GoogleCalendarAuthResponse {
   success: boolean;
-  data: {
+  data?: {
     authUrl: string;
   };
   error?: string;
@@ -13,7 +13,7 @@ export interface GoogleCalendarAuthResponse {
 
 export interface GoogleCalendarTokensResponse {
   success: boolean;
-  data: {
+  data?: {
     tokens: any;
     authenticated: boolean;
   };
@@ -34,9 +34,10 @@ export interface GoogleCalendarSyncResponse {
 
 export interface GoogleCalendarStatusResponse {
   success: boolean;
-  data: {
+  data?: {
     authenticated: boolean;
   };
+  error?: string;
 }
 
 export interface GoogleCalendarListResponse {
