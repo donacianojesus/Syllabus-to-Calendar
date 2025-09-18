@@ -53,7 +53,7 @@ const GoogleCalendarSync: React.FC<GoogleCalendarSyncProps> = ({
       
       const response = await googleCalendarApi.syncEvents(validEvents, selectedCalendarId);
       
-      if (response.success) {
+      if (response.success && response.data) {
         setLastSyncResult(response.data);
         toast.success(`Successfully synced ${response.data.syncedEvents} events to Google Calendar!`);
       } else {
@@ -77,7 +77,7 @@ const GoogleCalendarSync: React.FC<GoogleCalendarSyncProps> = ({
       setIsLoadingCalendars(true);
       const response = await googleCalendarApi.getCalendars();
       
-      if (response.success) {
+      if (response.success && response.data) {
         setAvailableCalendars(response.data.calendars);
       } else {
         toast.error(response.error || 'Failed to load calendars');
