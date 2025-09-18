@@ -33,7 +33,7 @@ An AI-powered web application that automatically parses law school syllabi and c
 ## Getting Started
 
 ### Quick Start
-1. **Visit the live application:** [https://syllabus-to-calendar.vercel.app](https://syllabus-to-calendar.vercel.app)
+1. **Visit the live application:** [https://syllabus-to-calendar-jesus-donacianos-projects.vercel.app](https://syllabus-to-calendar-jesus-donacianos-projects.vercel.app)
 2. **Upload a syllabus:** Navigate to Upload page and drag & drop your PDF
 3. **Fill in course information:** Provide course name, code, semester, and year
 4. **View your calendar:** Switch between calendar and list views to see your assignments
@@ -212,10 +212,6 @@ ENABLE_LLM_PARSING=true
 3. Commit your changes: `git commit -m 'Add amazing feature'`
 4. Push to the branch: `git push origin feature/amazing-feature`
 5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
