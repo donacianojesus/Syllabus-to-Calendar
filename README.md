@@ -24,6 +24,13 @@ An AI-powered web application that automatically parses law school syllabi and c
 - **Drag & Drop Upload** - Easy file upload with validation and progress indicators
 - **Clean Typography** - Serif headings with sans-serif body text
 
+### **Google Calendar Integration** 🆕
+- **OAuth 2.0 Authentication** - Secure connection to Google Calendar
+- **One-Click Sync** - Sync all parsed events to Google Calendar with a single click
+- **Smart Event Mapping** - Color-coded events based on type (assignments, exams, readings)
+- **Calendar Management** - Choose existing calendars or create new ones for courses
+- **Real-time Status** - Live sync status and detailed results
+
 ### **Technical Features**
 - **PDF Processing** - Robust PDF text extraction and parsing
 - **Date Recognition** - Intelligent parsing of various date formats
@@ -43,13 +50,15 @@ An AI-powered web application that automatically parses law school syllabi and c
 2. **Parse** → AI extracts assignments, exams, readings
 3. **Navigate** → Calendar auto-opens to correct semester
 4. **Visualize** → Switch between calendar and list views
-5. **Manage** → View upcoming events and activity summaries
+5. **Sync** → Connect to Google Calendar and sync events
+6. **Manage** → View upcoming events and activity summaries
 
 ## Technical Stack
 
 - **Frontend:** React + TypeScript + Vite + Tailwind CSS
 - **Backend:** Node.js + TypeScript + Express (Vercel Serverless Functions)
 - **AI Integration:** OpenAI GPT-4o for intelligent syllabus parsing
+- **Google Calendar:** googleapis library for calendar integration
 - **File Processing:** pdf-parse for PDF text extraction
 - **Date Processing:** date-fns for robust date parsing
 - **UI Components:** react-dropzone, react-calendar, lucide-react icons
@@ -63,6 +72,15 @@ An AI-powered web application that automatically parses law school syllabi and c
 - `POST /api/upload` - Upload and parse syllabus files
 - `GET /api/parse/status` - LLM service status and configuration
 - `POST /api/parse/llm` - Direct LLM parsing (text input only)
+
+### Google Calendar API 🆕
+- `GET /api/google-calendar/auth-url` - Get OAuth authorization URL
+- `POST /api/google-calendar/auth-callback` - Exchange code for tokens
+- `POST /api/google-calendar/set-credentials` - Set OAuth credentials
+- `POST /api/google-calendar/sync-events` - Sync events to Google Calendar
+- `GET /api/google-calendar/calendars` - Get user's calendars
+- `POST /api/google-calendar/create-calendar` - Create new calendar
+- `GET /api/google-calendar/status` - Check authentication status
 
 ## Example Usage
 
@@ -130,9 +148,18 @@ npm run install:all
 cp env.example .env
 # Edit .env with your configuration
 # Add your OpenAI API key for LLM parsing (optional)
+# Add your Google Calendar credentials for sync functionality
 ```
 
-4. **Run the development server:**
+4. **Set up Google Calendar Integration (Optional):**
+   - Go to [Google Cloud Console](https://console.cloud.google.com/)
+   - Create a new project or select existing one
+   - Enable Google Calendar API
+   - Create OAuth 2.0 credentials
+   - Add redirect URI: `http://localhost:3000/google-auth-callback`
+   - Copy Client ID and Secret to your `.env` file
+
+5. **Run the development server:**
 ```bash
 npm run dev
 ```

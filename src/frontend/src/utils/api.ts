@@ -51,7 +51,7 @@ export interface UploadResponse {
  */
 export async function uploadSyllabus(formData: FormData): Promise<UploadResponse> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/upload`, {
+    const response = await fetch(`${API_BASE_URL}/upload`, {
       method: 'POST',
       body: formData,
     });
@@ -75,7 +75,7 @@ export async function uploadSyllabus(formData: FormData): Promise<UploadResponse
 export async function checkHealth(): Promise<boolean> {
   try {
     const healthUrl = import.meta.env.PROD 
-      ? `${API_BASE_URL}/api/health`
+      ? `${API_BASE_URL}/health`
       : '/health';
     const response = await fetch(healthUrl);
     return response.ok;
@@ -90,7 +90,7 @@ export async function checkHealth(): Promise<boolean> {
  */
 export async function getLLMStatus(): Promise<any> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/parse/status`);
+    const response = await fetch(`${API_BASE_URL}/parse/status`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -106,7 +106,7 @@ export async function getLLMStatus(): Promise<any> {
  */
 export async function parseWithLLM(text: string, courseName?: string, courseCode?: string, semester?: string, year?: number): Promise<any> {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/parse/llm`, {
+    const response = await fetch(`${API_BASE_URL}/parse/llm`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -15,9 +15,11 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@google-cloud/local-auth": "^3.0.1",
     "axios": "^1.6.2",
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
+    "google-auth-library": "^10.3.0",
     "lucide-react": "^0.294.0",
     "react": "^18.2.0",
     "react-calendar": "^4.6.0",

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import Calendar from 'react-calendar';
 import { format, isSameDay } from 'date-fns';
-import { CalendarEvent, EventType, Priority } from '../../../shared/types';
+import { CalendarEvent, EventType, Priority } from '../../../shared/types.ts';
 import 'react-calendar/dist/Calendar.css';
 
 interface CalendarProps {

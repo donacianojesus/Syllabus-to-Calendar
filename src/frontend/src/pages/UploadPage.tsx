@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FileText, AlertCircle, CheckCircle, Loader } from 'lucide-react';
 import FileUploadComponent from '../components/FileUploadComponent';
-import { SyllabusUploadResponse } from '../../../shared/types';
+import { SyllabusUploadResponse } from '../../../shared/types.ts';
 
 interface UploadPageProps {
   onUploadSuccess?: (result: SyllabusUploadResponse) => void;

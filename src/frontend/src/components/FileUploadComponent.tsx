@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, FileText, X, AlertCircle } from 'lucide-react';
-import { SyllabusUploadResponse } from '../../../shared/types';
+import { SyllabusUploadResponse } from '../../../shared/types.ts';
 import { uploadSyllabus } from '../utils/api';
 import toast from 'react-hot-toast';
 
@@ -73,7 +73,7 @@ const FileUploadComponent: React.FC<FileUploadComponentProps> = ({
 
     try {
       const formData = new FormData();
-      formData.append('file', selectedFile);
+      formData.append('syllabus', selectedFile);
       
       // Always append course information (now required)
       formData.append('courseName', courseInfo.courseName);

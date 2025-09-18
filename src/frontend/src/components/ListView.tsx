@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Calendar, Clock, BookOpen, FileText, AlertCircle, CheckCircle } from 'lucide-react';
-import { CalendarEvent, EventType, Priority } from '../../../shared/types';
+import { CalendarEvent, EventType, Priority } from '../../../shared/types.ts';
 import { format, isToday, isTomorrow, isThisWeek, isThisMonth } from 'date-fns';
 
 interface ListViewProps {

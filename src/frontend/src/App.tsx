@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
 import UploadPage from './pages/UploadPage'
 import CalendarPage from './pages/CalendarPage'
-import { CalendarEvent } from '../../shared/types'
+import GoogleAuthCallback from './pages/GoogleAuthCallback'
+import { CalendarEvent } from '../../shared/types.ts'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home')
@@ -64,9 +65,14 @@ function App() {
 
   return (
     <Router>
-      <Layout currentPage={currentPage} onPageChange={handlePageChange}>
-        {renderPageContent()}
-      </Layout>
+      <Routes>
+        <Route path="/google-auth-callback" element={<GoogleAuthCallback />} />
+        <Route path="*" element={
+          <Layout currentPage={currentPage} onPageChange={handlePageChange}>
+            {renderPageContent()}
+          </Layout>
+        } />
+      </Routes>
       <Toaster position="top-right" />
     </Router>
   )

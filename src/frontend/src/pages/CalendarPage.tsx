@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, BookOpen, FileText, AlertCircle, CheckCircle, List, Grid3X3 } from 'lucide-react';
 import CalendarComponent from '../components/Calendar';
 import ListView from '../components/ListView';
-import { CalendarEvent, EventType, Priority } from '../../../shared/types';
+import GoogleCalendarAuth from '../components/GoogleCalendarAuth';
+import GoogleCalendarSync from '../components/GoogleCalendarSync';
+import { CalendarEvent, EventType, Priority } from '../../../shared/types.ts';
 import { format, isSameDay } from 'date-fns';
 
 interface CalendarPageProps {
@@ -58,6 +60,7 @@ const CalendarPage: React.FC<CalendarPageProps> = ({
   const [selectedEvents, setSelectedEvents] = useState<CalendarEvent[]>([]);
   const [viewMode, setViewMode] = useState<ViewMode>('calendar');
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+  const [isGoogleCalendarAuthenticated, setIsGoogleCalendarAuthenticated] = useState<boolean>(false);
 
   // Update selected events when date changes
   useEffect(() => {
@@ -298,6 +301,17 @@ const CalendarPage: React.FC<CalendarPageProps> = ({
                 <p className="text-gray-400 text-center py-4">No events scheduled</p>
               )}
             </div>
+
+            {/* Google Calendar Integration */}
+            <GoogleCalendarAuth 
+              onAuthenticated={setIsGoogleCalendarAuthenticated}
+            />
+            
+            <GoogleCalendarSync
+              events={events}
+              courseInfo={courseInfo}
+              isAuthenticated={isGoogleCalendarAuthenticated}
+            />
           </div>
         </div>
       ) : (
