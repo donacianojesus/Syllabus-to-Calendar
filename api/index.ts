@@ -22,21 +22,12 @@ const getGoogleCalendarService = () => {
 // Middleware
 app.use(express.json());
 
-// CORS middleware
+// CORS middleware - PERMISSIVE (allows all origins)
 app.use((req, res, next) => {
-  const allowedOrigins = [
-    'https://syllabus-to-calendar-jesus-donacianos-projects.vercel.app',
-    'http://localhost:3000'
-  ];
-  
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-  }
-  
+  res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Credentials', 'false'); // Set to false when using *
   
   if (req.method === 'OPTIONS') {
     res.sendStatus(200);
@@ -54,12 +45,82 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Upload endpoint (placeholder - you'll need to implement this)
+// Upload endpoint
 app.post('/upload', upload.single('syllabus'), (req, res) => {
-  res.status(200).json({ 
-    message: 'Upload endpoint - implement your syllabus parsing logic here',
-    success: true 
-  });
+  try {
+    if (!req.file) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'No file uploaded' 
+      });
+    }
+
+    // Extract course information from form data
+    const courseName = req.body.courseName || 'Unknown Course';
+    const courseCode = req.body.courseCode || '';
+    const semester = req.body.semester || 'Unknown';
+    const year = parseInt(req.body.year) || new Date().getFullYear();
+
+    // For now, return a mock response with sample events
+    // In a real implementation, you would parse the PDF here
+    const mockEvents = [
+      {
+        id: '1',
+        title: 'Midterm Exam',
+        description: 'Midterm examination for ' + courseName,
+        date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
+        time: '10:00 AM',
+        type: 'exam',
+        course: courseName,
+        priority: 'high',
+        completed: false
+      },
+      {
+        id: '2',
+        title: 'Final Exam',
+        description: 'Final examination for ' + courseName,
+        date: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000).toISOString(), // 60 days from now
+        time: '2:00 PM',
+        type: 'exam',
+        course: courseName,
+        priority: 'high',
+        completed: false
+      },
+      {
+        id: '3',
+        title: 'Assignment 1 Due',
+        description: 'First assignment submission',
+        date: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString(), // 14 days from now
+        time: '11:59 PM',
+        type: 'assignment',
+        course: courseName,
+        priority: 'medium',
+        completed: false
+      }
+    ];
+
+    const parsedSyllabus = {
+      courseName,
+      courseCode,
+      semester,
+      year,
+      events: mockEvents,
+      rawText: `Mock syllabus content for ${courseName}`,
+      parsedAt: new Date().toISOString()
+    };
+
+    res.status(200).json({ 
+      success: true,
+      data: parsedSyllabus,
+      message: 'Syllabus uploaded and parsed successfully'
+    });
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'There was an error processing your syllabus' 
+    });
+  }
 });
 
 // Google Calendar endpoints
