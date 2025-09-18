@@ -1,501 +1,82 @@
-# LawBandit Calendar 
+# LawBandit Calendar
 
-**Status:** **COMPLETE** - Full-stack AI-powered syllabus parsing with interactive calendar  
-**Frontend:** Complete with calendar/list views, activity filtering, and responsive design  
-**Latest Update:** Production-ready application with comprehensive features
+**Live Application:** [https://syllabus-to-calendar.vercel.app](https://syllabus-to-calendar.vercel.app)
 
-This project transforms any law school syllabus into a clean, organized calendar displaying assignments, readings, and exams. The system uses advanced LLM parsing with intelligent fallback to ensure reliable syllabus processing regardless of format or API availability.
+An AI-powered web application that automatically parses law school syllabi and converts them into an interactive calendar. Simply upload your PDF syllabus, and the app will extract all important dates, assignments, and exams, presenting them in an easy-to-use interface with both calendar and list views.
 
-## **Key Achievement: Universal Syllabus Parser**
+## Features
 
-The parser now **consistently extracts specific assignments, readings, and exams from any syllabus format**, including:
-- **Detailed Weekly Schedules** (Dawson Contracts format)
-- **Structured Assignment Lists** (Torres Legal Communication format)  
-- **Any Other Syllabus Format** - Robust enough to handle variations
-
-## **COMPLETE FEATURES**
-
-### **Backend (Production Ready)**
-- **Universal Syllabus Parser** - Extracts specific assignments from ANY syllabus format
-- **AI-Powered Parsing** - LLM-based syllabus parsing with OpenAI GPT-4o
+### **Universal Syllabus Parser**
+- **AI-Powered Parsing** - Uses OpenAI GPT-4o for intelligent syllabus parsing
 - **Smart Fallback System** - Automatically falls back to regex parsing when LLM unavailable
-- **Syllabus Upload API** - Upload PDF/text files with intelligent parsing
-- **Advanced Event Extraction** - Detects assignments, exams, readings, and deadlines
+- **Format Flexibility** - Handles any syllabus format including detailed weekly schedules and structured assignment lists
 - **Specific Assignment Detection** - Extracts exact case names, page numbers, and assignment details
-- **Flexible Date Parsing** - Handles multiple date formats and edge cases
-- **Event Classification** - AI-powered categorization and priority assignment
-- **Confidence Scoring** - Shows parsing quality for both LLM and regex methods
-- **Comprehensive API** - Full REST API with health checks, status monitoring, and comparison tools
 
-### **Frontend (Production Ready)**
-- **Dark Theme Dashboard** - Professional `#171514` background with white accents
-- **Sidebar Navigation** - Clean 3-item navigation (Home, Upload, Calendar)
-- **Responsive Layout** - Mobile-friendly sidebar and main content area
-- **File Upload Interface** - Drag-and-drop with validation and progress indicators
-- **Interactive Calendar** - Monthly view with event visualization and navigation
+### **Interactive Calendar**
+- **Monthly Calendar View** - Visual representation of assignments and deadlines
 - **List View Toggle** - Switch between calendar and list views with sorting options
 - **Smart Auto-Navigation** - Calendar automatically opens to correct semester/month
-- **Event Visualization** - Color-coded dots, detailed event display, and priority indicators
-- **Activity Management** - Clean display of activities without specific dates
-- **Activity Filtering** - Activities automatically excluded from calendar view
-- **PDF-Only Support** - Clear specification that only PDF files are supported
-- **Clean UI Design** - Streamlined interface without unnecessary elements
-- **Typography System** - Serif headings with sans-serif body text
-- **Component Library** - Reusable UI components with consistent styling
-- **Visual Polish** - Thin borders, subtle shadows, and refined spacing
+- **Event Visualization** - Color-coded events with priority indicators
 
-## Overview
+### **Professional Interface**
+- **Dark Theme Design** - Professional `#171514` background with clean white accents
+- **Responsive Layout** - Mobile-friendly sidebar and main content area
+- **Drag & Drop Upload** - Easy file upload with validation and progress indicators
+- **Clean Typography** - Serif headings with sans-serif body text
 
-LawBandit Calendar is a **complete, production-ready web application** that automatically parses law school syllabi and converts them into an interactive calendar. Simply upload your PDF syllabus, and the app will extract all important dates, assignments, and exams, presenting them in an easy-to-use interface with both calendar and list views.
+### **Technical Features**
+- **PDF Processing** - Robust PDF text extraction and parsing
+- **Date Recognition** - Intelligent parsing of various date formats
+- **Event Classification** - AI-powered categorization and priority assignment
+- **Error Handling** - Graceful degradation with detailed error responses
 
-**Ready for deployment and use by law students worldwide.**
+## Getting Started
 
-## Features 
+### Quick Start
+1. **Visit the live application:** [https://syllabus-to-calendar.vercel.app](https://syllabus-to-calendar.vercel.app)
+2. **Upload a syllabus:** Navigate to Upload page and drag & drop your PDF
+3. **Fill in course information:** Provide course name, code, semester, and year
+4. **View your calendar:** Switch between calendar and list views to see your assignments
 
-### **COMPLETED FEATURES**
-- **Universal Syllabus Parser:** Extracts specific assignments from ANY syllabus format
-- **LLM Integration:** OpenAI GPT-4o for intelligent syllabus parsing 
-- **Smart Fallback System:** Automatic fallback to regex parsing when LLM unavailable
-- **Syllabus Upload API:** Upload PDF or text files via REST API
-- **AI-Powered Parsing:** Advanced text extraction and event detection
-- **Specific Assignment Detection:** Extracts exact case names, page numbers, and assignment details
-- **Flexible Event Detection:** Identifies assignments, exams, readings, and deadlines
-- **Intelligent Date Recognition:** Parses various date formats with high accuracy
-- **AI Event Classification:** Smart categorization and priority assignment
-- **Comprehensive Error Handling:** Graceful degradation and detailed error responses
-- **File Validation:** Type checking and size limits (10MB max)
-- **API Status Monitoring:** Real-time service health and configuration checks
-- **Parsing Comparison:** Side-by-side LLM vs regex parsing results
-
-### **FUTURE ENHANCEMENTS**
-- **Google Calendar Integration:** Sync events directly to Google Calendar
-- **Event Management:** Edit, delete, and mark events as complete
-- **Export Options:** Download calendar as PDF or export to other formats
-
-### **Universal Parser Capabilities**
-
-The parser now **consistently extracts specific assignments from any syllabus format**:
-
-#### **Dawson Contracts Course (Weekly Schedule Format)**
-```json
-{
-  "title": "Week 1 Monday: Introduction materials (Hawkins v. McGee) & Home Building v. Blaisdell",
-  "type": "reading",
-  "priority": "medium"
-},
-{
-  "title": "Week 1 Wednesday: Door Dash, Inc. v. City of New York; Pages 38-54",
-  "type": "reading", 
-  "priority": "medium"
-}
-```
-
-#### **Torres Legal Communication Course (Assignment Schedule Format)**
-```json
-{
-  "title": "Partial Motion to Dismiss or Opposition",
-  "type": "assignment",
-  "priority": "medium",
-  "description": "Ungraded assignment"
-},
-{
-  "title": "Final Appellate Brief",
-  "type": "assignment", 
-  "priority": "high",
-  "description": "Graded assignment"
-}
-```
-
-### **LLM Workflow (Currently Active)**
-- **Intelligent Parsing:** GPT-4o handles variability across different syllabus formats
-- **Structured JSON Output:** Assignments, exams, and activities with proper categorization
-- **Smart Fallback:** Automatic fallback to regex parsing when LLM quota exceeded
-- **Cost Optimization:** GPT-4o provides cost savings with better performance
-
-#### Example LLM JSON Output
-```json
-{
-  "assignments": [
-    {"title": "Assignment 1", "due_date": "2025-09-15", "details": "Read chapters 1-3", "priority": "high"}
-  ],
-  "exams": [
-    {"title": "Midterm Exam", "date": "2025-10-20", "priority": "urgent"}
-  ],
-  "activities": [
-    {"title": "Weekly Reading", "details": "Chapters 4-5", "type": "reading"}
-  ],
-  "course_info": {
-    "course_name": "Constitutional Law",
-    "course_code": "LAW 101",
-    "semester": "Fall",
-    "year": 2025
-  },
-  "confidence_score": 92
-}
-```
-
-## **Getting Started**
-
-### **Quick Start**
-1. **Install dependencies:**
-   ```bash
-   npm install
-   npm run install:all
-   ```
-
-2. **Start development servers:**
-   ```bash
-   npm run dev
-   ```
-   - Frontend: http://localhost:3000
-   - Backend: http://localhost:3001
-
-3. **Upload a syllabus:**
-   - Navigate to Upload page
-   - Drag and drop a PDF file
-   - Fill in course information
-   - View parsed events in calendar or list view
-
-### **Demo Workflow**
+### Demo Workflow
 1. **Upload** → PDF syllabus file
 2. **Parse** → AI extracts assignments, exams, readings
 3. **Navigate** → Calendar auto-opens to correct semester
 4. **Visualize** → Switch between calendar and list views
 5. **Manage** → View upcoming events and activity summaries
 
-### Technical Stack
-- **Backend:** Node.js + TypeScript + Express + Multer
-- **File Parsing:** pdf-parse, mammoth (for DOCX support)
-- **Date Processing:** date-fns for robust date parsing
+## Technical Stack
+
 - **Frontend:** React + TypeScript + Vite + Tailwind CSS
+- **Backend:** Node.js + TypeScript + Express (Vercel Serverless Functions)
+- **AI Integration:** OpenAI GPT-4o for intelligent syllabus parsing
+- **File Processing:** pdf-parse for PDF text extraction
+- **Date Processing:** date-fns for robust date parsing
 - **UI Components:** react-dropzone, react-calendar, lucide-react icons
-- **Styling:** Custom CSS with Tailwind utilities and design system
-- **Development:** Concurrently for running both servers
+- **Deployment:** Vercel (Frontend + Backend)
 
-**Legacy / Optional Parsing:**  
-PDF parsing library (pdf-parse) is still available for initial testing, but the recommended approach is the LLM workflow for more consistent and flexible results.
+## API Endpoints
 
-## **API Endpoints**
-
-### Backend API (Port 3001)
-- `GET /health` - Server health check
+### Backend API
+- `GET /api/health` - Server health check
 - `GET /api` - API information and available endpoints
-- `GET /api/upload/info` - Upload requirements and supported formats
-- `POST /api/upload` - Upload and parse syllabus files (with LLM + regex fallback)
+- `POST /api/upload` - Upload and parse syllabus files
 - `GET /api/parse/status` - LLM service status and configuration
 - `POST /api/parse/llm` - Direct LLM parsing (text input only)
-- `POST /api/parse/compare` - Compare LLM vs regex parsing results
 
-## **Current Status: ✅ COMPLETE & PRODUCTION READY**
-
-**Core Features Complete:**
-- Universal syllabus parsing (any format)
-- Interactive calendar with event visualization
-- List view toggle with sorting options
-- Activity filtering (activities excluded from calendar)
-- PDF-only file support
-- Smart auto-navigation based on semester
-- Professional responsive UI
-- Seamless API integration
-
-**🚀 Future Enhancement Opportunities**
-- **Google Calendar Integration** - Direct sync to Google Calendar for external access
-- **Advanced Event Management** - Edit, delete, and mark events as complete
-- **Export and Sharing** - PDF export and calendar sharing capabilities
-- **Multiple Syllabus Support** - Handle multiple courses simultaneously
-
-**Technical Achievements:**
-- 95%+ parsing accuracy across different syllabus formats
-- Sub-second response times for file processing
-- Robust error handling and fallback systems
-- Professional-grade UI/UX design
-- **Ready for Vercel deployment** - Frontend optimized for static hosting
-- **Production-ready backend** - Robust API with comprehensive error handling
-
-### Frontend (Port 3000)
-- `http://localhost:3000` - React application (production ready)
-
-## **API Usage Examples**
+## Example Usage
 
 ### Upload and Parse Syllabus
 ```bash
-# Upload a syllabus (uses LLM with regex fallback)
-curl -X POST http://localhost:3001/api/upload \
-  -F "syllabus=@your-syllabus.pdf" \
+curl -X POST https://syllabus-to-calendar.vercel.app/api/upload \
+  -F "file=@your-syllabus.pdf" \
   -F "courseName=Constitutional Law" \
   -F "courseCode=LAW 101" \
   -F "semester=Fall" \
   -F "year=2024"
 ```
 
-### Check LLM Service Status
-```bash
-# Check if LLM parsing is available
-curl http://localhost:3001/api/parse/status
-```
-
-### Direct LLM Parsing
-```bash
-# Parse text directly with LLM
-curl -X POST http://localhost:3001/api/parse/llm \
-  -H "Content-Type: application/json" \
-  -d '{"text": "Assignment 1 due September 15, 2024", "courseName": "Test Course"}'
-```
-
-### Compare Parsing Methods
-```bash
-# Compare LLM vs regex parsing
-curl -X POST http://localhost:3001/api/parse/compare \
-  -H "Content-Type: application/json" \
-  -d '{"text": "Assignment 1 due September 15, 2024", "courseName": "Test Course"}'
-```
-
-## Installation & Setup
-
-### Prerequisites
-- Node.js (v16 or higher)
-- npm or yarn package manager
-
-### Quick Start
-
-1. **Clone the repository:**
-```bash
-git clone https://github.com/donacianojesus/lawbandit-calendar.git
-cd lawbandit-calendar
-```
-
-2. **Install dependencies:**
-```bash
-npm install
-```
-
-3. **Set up environment variables:**
-```bash
-cp .env.example .env
-# Edit .env with your configuration
-# Add your OpenAI API key for LLM parsing (optional)
-```
-
-4. **Run the development server:**
-```bash
-npm run dev
-```
-
-5. **Test the API:**
-- Backend API: `http://localhost:3001`
-- Frontend: `http://localhost:3000` (In development)
-- Health check: `http://localhost:3001/health`
-- LLM Status: `http://localhost:3001/api/parse/status`
-
-6. **Test LLM Integration:**
-- **With API Key:** LLM parsing will work automatically
-- **Without API Key:** System falls back to regex parsing
-- **Upload a syllabus:** Use `POST http://localhost:3001/api/upload`
-
-### Development Commands
-
-```bash
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Run tests
-npm test
-
-# Lint code
-npm run lint
-
-# Type checking
-npm run type-check
-```
-
-## Project Structure
-
-```
-lawbandit-calendar/
-├── src/
-│   ├── backend/                    # Node.js API server (Complete)
-│   │   ├── src/
-│   │   │   ├── routes/            # Upload API endpoints
-│   │   │   ├── services/          # PDF/Text parsing services
-│   │   │   ├── utils/             # File upload & date parsing
-│   │   │   └── index.ts           # Express server setup
-│   │   └── package.json           # Backend dependencies
-│   ├── frontend/                   # React application (Complete)
-│   │   ├── src/
-│   │   │   ├── components/        # UI components (Layout, Sidebar, Header)
-│   │   │   ├── pages/             # Page components (HomePage)
-│   │   │   ├── hooks/             # Custom React hooks (planned)
-│   │   │   ├── App.tsx            # Main React app with routing
-│   │   │   └── index.css          # Design system and styling
-│   │   └── package.json           # Frontend dependencies
-│   └── shared/                     # Shared types and utilities
-│       ├── types.ts               # Calendar event types
-│       └── utils.ts               # Shared utility functions
-├── docs/                          # Documentation
-├── public/                        # Static assets
-└── package.json                   # Root dependencies & scripts
-```
-
-## Configuration
-
-### Environment Variables
-
-Create a `.env` file in the root directory:
-
-```env
-# Server Configuration
-PORT=3001
-NODE_ENV=development
-
-# File Upload
-MAX_FILE_SIZE=10MB
-ALLOWED_FILE_TYPES=pdf,txt,doc,docx
-
-# LLM Configuration (Optional)
-OPENAI_API_KEY=your_openai_api_key_here
-LLM_MODEL=gpt-4o-mini
-LLM_MAX_TOKENS=2000
-LLM_TEMPERATURE=0.1
-ENABLE_LLM_PARSING=true
-
-# Optional: Google Calendar Integration
-GOOGLE_CALENDAR_CLIENT_ID=your_client_id
-GOOGLE_CALENDAR_CLIENT_SECRET=your_client_secret
-```
-
-## **Testing the Universal Parser**
-
-### **Real Syllabus Testing**
-The parser has been tested with real law school syllabi and consistently extracts specific assignments:
-
-#### **Test with Dawson Contracts Syllabus**
-```bash
-curl -X POST http://localhost:3001/api/upload \
-  -F "syllabus=@Dawson Syllabus Fall 2024.pdf" \
-  -F "courseName=Dawson Contracts Course" \
-  -F "courseCode=DWS101" \
-  -F "semester=Fall" \
-  -F "year=2024"
-```
-
-**Expected Output:** Specific weekly readings with case names and page numbers
-
-#### **Test with Torres Legal Communication Syllabus**
-```bash
-curl -X POST http://localhost:3001/api/upload \
-  -F "syllabus=@Torres Legal Communication.pdf" \
-  -F "courseName=Legal Communication and Research Skills II" \
-  -F "courseCode=LCOMM201" \
-  -F "semester=Spring" \
-  -F "year=2025"
-```
-
-**Expected Output:** Specific assignments with due dates and descriptions
-
-### Quick Test (Recommended)
-The easiest way to test the API is to place a PDF file in the project root directory and run:
-
-```bash
-# Create a simple test script
-cat > test-upload.js << 'EOF'
-const fs = require('fs');
-const FormData = require('form-data');
-const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
-
-async function testUpload() {
-  const pdfFiles = fs.readdirSync('.').filter(f => f.endsWith('.pdf'));
-  if (pdfFiles.length === 0) {
-    console.log('No PDF files found. Place a PDF in the project root.');
-    return;
-  }
-  
-  const form = new FormData();
-  form.append('syllabus', fs.createReadStream(pdfFiles[0]));
-  form.append('courseName', 'Test Course');
-  
-  const response = await fetch('http://localhost:3001/api/upload', {
-    method: 'POST',
-    body: form
-  });
-  
-  const result = await response.json();
-  console.log('Success! Events found:', result.data?.events?.length || 0);
-  console.log('Confidence:', result.metadata?.confidence + '%');
-}
-
-testUpload();
-EOF
-
-# Run the test
-node test-upload.js
-```
-
-### Method 1: Using cURL
-```bash
-curl -X POST http://localhost:3001/api/upload \
-  -F "syllabus=@your-syllabus.pdf" \
-  -F "courseName=Constitutional Law" \
-  -F "courseCode=LAW 101"
-```
-
-### Method 2: Using PowerShell (Windows)
-```powershell
-$form = @{
-    syllabus = Get-Item "path\to\your\syllabus.pdf"
-    courseName = "Constitutional Law"
-    courseCode = "LAW 101"
-}
-Invoke-RestMethod -Uri "http://localhost:3001/api/upload" -Method Post -Form $form
-```
-
-### Method 3: Using Node.js (Full Example)
-```javascript
-const fs = require('fs');
-const FormData = require('form-data');
-const fetch = require('node-fetch');
-
-async function testUpload() {
-  const form = new FormData();
-  form.append('syllabus', fs.createReadStream('syllabus.pdf'));
-  form.append('courseName', 'Constitutional Law');
-  form.append('courseCode', 'LAW 101');
-  form.append('semester', 'Fall');
-  form.append('year', '2024');
-
-  const response = await fetch('http://localhost:3001/api/upload', {
-    method: 'POST',
-    body: form
-  });
-
-  const result = await response.json();
-  console.log('Response:', JSON.stringify(result, null, 2));
-}
-
-testUpload();
-```
-
-### Method 4: Using Postman or Similar Tools
-1. Set method to `POST`
-2. URL: `http://localhost:3001/api/upload`
-3. Body type: `form-data`
-4. Add fields:
-   - `syllabus` (file): Select your PDF
-   - `courseName` (text): "Test Course"
-   - `courseCode` (text): "TEST 101"
-
-## **Expected Response**
-
-The API returns structured data including:
-- **Course Information:** Name, code, semester, year
-- **Parsed Events:** Array of calendar events with dates, types, and priorities
-- **Confidence Score:** Parsing quality (0-100%)
-- **Parsing Method:** Indicates whether LLM or regex parsing was used
-- **Metadata:** File info, parsing statistics, and service status
-
-### Sample Response (LLM Parsing)
+### Expected Response
 ```json
 {
   "success": true,
@@ -522,167 +103,123 @@ The API returns structured data including:
 }
 ```
 
-### Sample Response (Regex Fallback)
-```json
-{
-  "success": true,
-  "data": {
-    "courseName": "Constitutional Law",
-    "courseCode": "LAW 101",
-    "events": [...]
-  },
-  "metadata": {
-    "confidence": 75,
-    "method": "regex",
-    "fileType": "pdf",
-    "eventsFound": 3
-  }
-}
+## Supported Formats
+
+- **PDF files** (.pdf) - Recommended for best results
+- **Maximum file size:** 10MB
+- **Course information required:** Course name, code, semester, and year
+
+## Development
+
+### Local Development Setup
+
+1. **Clone the repository:**
+```bash
+git clone https://github.com/donacianojesus/Syllabus-to-Calendar.git
+cd Syllabus-to-Calendar
 ```
 
-## **Testing Different File Types**
+2. **Install dependencies:**
+```bash
+npm install
+npm run install:all
+```
 
-### Supported Formats
-- **PDF files** (.pdf) - Recommended for best results
+3. **Set up environment variables:**
+```bash
+cp env.example .env
+# Edit .env with your configuration
+# Add your OpenAI API key for LLM parsing (optional)
+```
 
-### Test Files
-You can test with:
-1. **Your own syllabus PDF** - Most realistic test
-2. **Sample text file** - Create a simple `.txt` file with assignment dates
-3. **Generated test PDF** - Use the script in the project to create test content
+4. **Run the development server:**
+```bash
+npm run dev
+```
+- Frontend: http://localhost:3000
+- Backend: http://localhost:3001
 
-### Troubleshooting
+### Development Commands
 
-**Common Issues:**
-- **"No file uploaded"** - Make sure the file field is named `syllabus`
-- **"Invalid file type"** - Only PDF files are supported
-- **"File size exceeds limit"** - Maximum file size is 10MB
-- **"Multipart: Boundary not found"** - Use proper multipart/form-data format
+```bash
+# Start development server
+npm run dev
 
-**Low Confidence Scores:**
-- Try with a different PDF format
-- Ensure the syllabus contains clear assignment dates
-- Check that dates are in recognizable formats (MM/DD/YYYY, Month DD, etc.)
+# Build for production
+npm run build
 
-## **LLM Workflow Overview (Currently Active)**
-1. Extract syllabus text from PDF and clean it
-2. Send cleaned text to LLM → return structured JSON with assignments, exams, activities
-3. Validate JSON → convert to calendar events with proper categorization
-4. **Smart Fallback:** If LLM fails, automatically use regex parsing
-5. Return results with parsing method and confidence score
+# Run tests
+npm test
 
+# Lint code
+npm run lint
 
-### Development Workflow
+# Type checking
+npm run type-check
+```
+
+## Project Structure
+
+```
+Syllabus-to-Calendar/
+├── src/
+│   ├── frontend/                   # React application
+│   │   ├── src/
+│   │   │   ├── components/        # UI components
+│   │   │   ├── pages/             # Page components
+│   │   │   ├── utils/             # API utilities
+│   │   │   └── App.tsx            # Main React app
+│   │   └── package.json           # Frontend dependencies
+│   ├── backend/                    # Node.js API server
+│   │   ├── src/
+│   │   │   ├── routes/            # API endpoints
+│   │   │   ├── services/           # Parsing services
+│   │   │   ├── utils/             # Utilities
+│   │   │   └── index.ts           # Express server
+│   │   └── package.json           # Backend dependencies
+│   └── shared/                     # Shared types and utilities
+├── docs/                          # Documentation
+└── package.json                   # Root dependencies & scripts
+```
+
+## Configuration
+
+### Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+# Server Configuration
+PORT=3001
+NODE_ENV=development
+
+# File Upload
+MAX_FILE_SIZE=10MB
+ALLOWED_FILE_TYPES=pdf
+
+# LLM Configuration (Optional)
+OPENAI_API_KEY=your_openai_api_key_here
+LLM_MODEL=gpt-4o
+LLM_MAX_TOKENS=10000
+LLM_TEMPERATURE=0.1
+ENABLE_LLM_PARSING=true
+```
+
+## Contributing
+
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/amazing-feature`
 3. Commit your changes: `git commit -m 'Add amazing feature'`
 4. Push to the branch: `git push origin feature/amazing-feature`
 5. Open a Pull Request
 
+## License
 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## **Current Status**
+## Acknowledgments
 
-### **Backend (Complete)**
-- **Universal Parser:** Extracts specific assignments from ANY syllabus format
-- **API:** Fully functional with LLM integration and smart fallback
-- **LLM Parsing:** OpenAI GPT-4o integration with quota management 
-- **File Processing:** PDF and text file support with intelligent parsing
-- **Event Extraction:** AI-powered detection of assignments, exams, and deadlines
-- **Specific Assignment Detection:** Extracts exact case names, page numbers, and assignment details
-- **Smart Fallback:** Automatic fallback to regex parsing when LLM unavailable
-- **API Monitoring:** Real-time service status and configuration checks
-
-### **Frontend (Complete)**
-- **Dashboard Layout:** Professional dark theme with sidebar navigation
-- **Component System:** Reusable UI components with consistent styling
-- **Responsive Design:** Mobile-friendly layout and navigation
-- **File Upload Interface:** Drag-and-drop with react-dropzone
-- **Calendar Display:** Monthly view with event rendering and list view toggle
-- **Event Management:** List view with sorting and activity filtering
-- **API Integration:** Complete frontend-backend integration with error handling
-- **Design System:** Custom CSS with Tailwind utilities and typography
-
-### **PRODUCTION READY**
-- **Complete Full-Stack Application** - Ready for deployment and use
-- **All Core Features Implemented** - No missing functionality
-- **Professional UI/UX** - Production-quality design and user experience
-- **Robust Error Handling** - Graceful degradation and user feedback
-
-## **Frontend Development Progress**
-
-### **Dashboard Layout (Complete)**
-- **Dark Theme Design System** - `#171514` background with white accents
-- **Sidebar Navigation** - Clean 3-item navigation (Home, Upload, Calendar)
-- **Header Component** - Dynamic titles with action buttons
-- **Home Dashboard** - Clean interface with quick actions
-- **Responsive Layout** - Mobile-friendly sidebar and main content
-- **Typography System** - Serif headings with sans-serif body text
-- **Component Library** - Reusable UI components with consistent styling
-- **Visual Polish** - Thin borders, subtle shadows, refined spacing
-
-## **Contributing**
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
-5. Open a Pull Request
-
-
-## **Key Improvements Achieved**
-
-### **Universal Syllabus Parser**
-- **Format Consistency:** Handles both detailed weekly schedules and structured assignment lists
-- **Specific Assignment Extraction:** Extracts exact case names, page numbers, and assignment details
-- **Robust Parsing:** Ignores general course materials, focuses on actionable academic items
-- **Real-World Testing:** Successfully tested with actual law school syllabi
-
-### **Parser Capabilities**
-- **Dawson Format:** Extracts specific weekly readings with case names and page numbers
-- **Torres Format:** Extracts specific assignments with due dates and descriptions  
-- **Any Format:** Robust enough to handle variations in syllabus structure
-- **Smart Filtering:** Prioritizes assignments, readings, and exams over administrative content
-
-### **Technical Achievements**
-- **LLM Integration:** OpenAI GPT-4o with intelligent prompt engineering 
-- **Date Validation:** Handles ambiguous dates and moves them to activities section
-- **Event Classification:** AI-powered categorization and priority assignment
----
-
-## **Known Issues**
-
-### **Assignment Classification**
-- **Course Evaluations**: Some course evaluations with specific dates (e.g., "Complete online course evaluation on March 21") may still be classified as Activities instead of Dated Events
-- **Week-based Assignments**: Assignments using "Week X [Day]:" format are correctly preserved with week information but may not always get specific calendar dates
-
-### **Date Extraction**
-- **Ambiguous Dates**: Some assignments with unclear date references may be moved to Activities section
-- **Date Range Handling**: Multi-day events (e.g., "April 3-4") use the first date only
-
-### **LLM Processing**
-- **Token Limits**: Very long syllabi may hit token limits, causing incomplete extraction
-- **Response Truncation**: Complex syllabi might have truncated responses in edge cases
-
-### **File Processing**
-- **DOCX Support**: Currently only supports PDF and TXT files
-- **Large Files**: Files over 10MB may experience processing delays
-
----
-
-## **PROJECT COMPLETION SUMMARY**
-
-**COMPLETE & PRODUCTION READY**
-
-This application is **fully functional and ready for deployment**. All core features have been implemented:
-
-- **Universal Syllabus Parser** - Extracts assignments from any PDF syllabus format
-- **Interactive Calendar & List Views** - Complete user interface with sorting and filtering
-- **AI-Powered Processing** - LLM integration with smart fallback systems
-- **Professional UI/UX** - Production-quality design and user experience
-- **Robust Error Handling** - Comprehensive error management and user feedback
-
-**Ready for:** Vercel deployment, production use, and internship submission.
-
-**Future enhancements** (Google Calendar sync, multiple syllabus support) are optional additions that would further enhance an already complete application.
-# Trigger Vercel redeploy Tue Sep 16 15:40:41 EDT 2025
+- Built with React, TypeScript, and Node.js
+- AI-powered parsing with OpenAI GPT-4o
+- Deployed on Vercel
+- Designed for law students and academic professionals
