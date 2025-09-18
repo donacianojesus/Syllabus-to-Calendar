@@ -46,7 +46,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             <h3 className="text-xl font-bold text-white">View Calendar</h3>
           </div>
           <p className="text-gray-400 mb-4">
-            View your events in a clean, organized calendar format with filtering and search options.
+            View your events in a clean, organized calendar format.
           </p>
           <button 
             className="btn-secondary"
