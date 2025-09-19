@@ -4,7 +4,7 @@
 const getApiBaseUrl = () => {
   // In production (Vercel), use environment variable or fallback to your backend
   if (import.meta.env.PROD) {
-    const url = import.meta.env.VITE_API_URL || 'https://nodejs-serverless-function-express-seven-mu-37.vercel.app';
+    const url = import.meta.env.VITE_API_URL || 'https://nodejs-serverless-function-express-qc0ly9l83.vercel.app';
     // Remove trailing slash to prevent double slashes
     return url.replace(/\/$/, '');
   }
