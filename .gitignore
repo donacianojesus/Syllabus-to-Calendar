@@ -99,3 +99,4 @@ create-test-pdf.js
 src/shared/*.js
 src/shared/*.d.ts
 src/shared/*.map
+.vercel

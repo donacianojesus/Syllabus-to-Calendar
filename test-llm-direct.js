@@ -1,51 +1,56 @@
-const OpenAI = require('openai');
-require('dotenv').config();
+const pdf = require('pdf-parse');
+const fs = require('fs');
+const path = require('path');
 
-async function testLLMDirect() {
-  console.log('🧪 Testing LLM Direct Parsing...');
-  
-  const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
-
-  const testText = `Week 1 Readings: M: Introduction materials (Hawkins v. McGee) & Home Building v. Blaisdell W: Door Dash, Inc. v. City of New York; Pages 38-54 Week 2: Readings: M: Pages 66-90 W: Pages 91-101; 119-138 Week 3: Readings: M: Labor Day Holiday W: pp 153-172 Week 4: Readings: M: pp 181-201 W: pp 206-222 Week 5: Readings: M: 223-240 W: 240-251; 258-263`;
-
-  const prompt = `Extract ALL weekly readings from this text. Return JSON with activities array.
-
-Text: ${testText}
-
-Return JSON:
-{
-  "activities": [
-    {
-      "title": "Week X: Description",
-      "details": "Full details",
-      "type": "reading",
-      "priority": "medium"
-    }
-  ]
-}`;
-
+// Mock the LLM parser service
+async function testLLMParsing() {
   try {
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: [
-        {
-          role: 'user',
-          content: prompt
+    // Read the PDF
+    const pdfPath = path.join(__dirname, 'HIST 242_ Syllabus (Fall 2025) (Brief Ed for Printing).pdf');
+    const dataBuffer = fs.readFileSync(pdfPath);
+    const data = await pdf(dataBuffer);
+    
+    console.log('=== PDF TEXT EXTRACTED ===');
+    console.log('Text length:', data.text.length);
+    
+    // Extract the schedule section - look for a broader pattern
+    const scheduleMatch = data.text.match(/Tentative Class Schedule and Topics[\s\S]*?(?=\n\n[A-Z]|$)/);
+    if (scheduleMatch) {
+      const scheduleText = scheduleMatch[0];
+      console.log('\n=== SCHEDULE SECTION ===');
+      console.log('Schedule length:', scheduleText.length);
+      
+      // Look for week patterns
+      const weekPatterns = scheduleText.match(/#\d+\s*\([^)]+\)/g);
+      console.log('\n=== WEEK PATTERNS FOUND ===');
+      console.log('Count:', weekPatterns?.length || 0);
+      weekPatterns?.forEach((pattern, index) => {
+        console.log(`${index + 1}. ${pattern}`);
+      });
+      
+      // Look for topic descriptions that follow week patterns
+      console.log('\n=== TOPIC DESCRIPTIONS ===');
+      const lines = scheduleText.split('\n');
+      let currentDate = null;
+      
+      lines.forEach((line, index) => {
+        const weekMatch = line.match(/#\d+\s*\(([^)]+)\)\s*(.+)/);
+        if (weekMatch) {
+          currentDate = weekMatch[1];
+          const topic = weekMatch[2].trim();
+          if (topic) {
+            console.log(`${index + 1}. Date: ${currentDate} | Topic: ${topic}`);
+          }
+        } else if (currentDate && line.trim() && !line.match(/^[A-Z]/)) {
+          // This might be a continuation of the topic
+          console.log(`${index + 1}. Date: ${currentDate} | Continuation: ${line.trim()}`);
         }
-      ],
-      max_tokens: 1000,
-      temperature: 0.1,
-      response_format: { type: "json_object" }
-    });
-
-    console.log('✅ LLM Response:');
-    console.log(JSON.stringify(JSON.parse(response.choices[0].message.content), null, 2));
+      });
+    }
     
   } catch (error) {
-    console.log('❌ LLM Error:', error.message);
+    console.error('Error:', error);
   }
 }
 
-testLLMDirect();
+testLLMParsing();
