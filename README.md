@@ -1,6 +1,6 @@
 # LawBandit Calendar
 
-**Live Application:** [https://syllabus-to-calendar.vercel.app](https://syllabus-to-calendar.vercel.app)
+**Live Application:** [https://syllabus-to-calendar-kappa.vercel.app](https://syllabus-to-calendar-kappa.vercel.app)
 
 An AI-powered web application that automatically parses law school syllabi and converts them into an interactive calendar. Simply upload your PDF syllabus, and the app will extract all important dates, assignments, and exams, presenting them in an easy-to-use interface with both calendar and list views.
 
