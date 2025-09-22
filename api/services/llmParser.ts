@@ -373,7 +373,7 @@ If you see assignments with phrases like "submit on TWEN", "submit online", "sub
 If you see assignments with phrases like "bring to class", "due in class", "class on [date]", "complete on [date]", "finish by [date]", extract:
 - "[Assignment Name]" as assignment with the specific due_date
 
-If you see assignments with phrases like "complete [something] on [date]" or "finish [something] by [date]", extract:
+If you see assignments with phrases like "complete [something] on [date]", "finish [something] by [date]", extract:
 - "[Assignment Name]" as assignment with the specific due_date
 
 If you see "Writing Assignment Due: Complete Motion or Opposition", extract:
