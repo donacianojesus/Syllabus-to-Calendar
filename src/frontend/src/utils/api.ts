@@ -1,4 +1,4 @@
-// API utility functions for LawBandit Calendar
+// API utility functions for Syllabus to Calendar
 
 // Determine API base URL based on environment
 const getApiBaseUrl = () => {

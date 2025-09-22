@@ -24,7 +24,7 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange }) 
       case 'subscribe':
         return 'Subscribe';
       default:
-        return 'LawBandit Calendar';
+        return 'Syllabus to Calendar';
     }
   };
 

@@ -12,7 +12,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       {/* Welcome Section */}
       <div className="text-center">
         <h2 className="text-4xl font-bold text-white mb-4">
-          Welcome to LawBandit Calendar
+          Welcome to Syllabus to Calendar
         </h2>
         <p className="text-gray-400 text-lg">
           Transform your law school syllabus into an organized calendar
