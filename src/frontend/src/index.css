@@ -20,27 +20,27 @@
 }
 
 @layer components {
-  /* LawBandit Color Palette */
-  .bg-lawbandit-dark {
+  /* Application Color Palette */
+  .bg-app-dark {
     background-color: #171514;
   }
   
-  .bg-lawbandit-sidebar {
+  .bg-app-sidebar {
     background-color: #171514;
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.3);
     border-right: 0.5px solid rgba(255, 255, 255, 0.1);
   }
   
-  .bg-lawbandit-card {
+  .bg-app-card {
     background-color: #171514;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   }
   
-  .text-lawbandit-accent {
+  .text-app-accent {
     @apply text-white;
   }
   
-  .text-lawbandit-muted {
+  .text-app-muted {
     @apply text-gray-400;
   }
   
@@ -65,7 +65,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   }
   
-  .card-lawbandit {
+  .card-app {
     background-color: #171514;
     @apply rounded-lg p-6;
     border: 0.5px solid rgba(255, 255, 255, 0.1);

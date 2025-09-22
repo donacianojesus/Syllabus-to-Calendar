@@ -14,11 +14,11 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, onPageChange }) => {
   ];
 
   return (
-    <div className="w-64 bg-lawbandit-sidebar h-screen flex flex-col">
+    <div className="w-64 bg-app-sidebar h-screen flex flex-col">
       {/* Logo */}
       <div className="p-6">
         <div className="flex items-center">
-          <span className="text-white font-bold text-xl">LawBandit</span>
+          <span className="text-white font-bold text-xl">Calendar</span>
         </div>
       </div>
 

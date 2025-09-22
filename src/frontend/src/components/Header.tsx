@@ -6,7 +6,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ title }) => {
   return (
-    <header className="bg-lawbandit-dark border-b border-gray-700 px-6 py-4">
+    <header className="bg-app-dark border-b border-gray-700 px-6 py-4">
       <div className="flex items-center justify-between">
         {/* Left side - Title */}
         <div>

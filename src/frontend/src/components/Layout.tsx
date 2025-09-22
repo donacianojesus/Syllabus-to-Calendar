@@ -29,7 +29,7 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange }) 
   };
 
   return (
-    <div className="flex h-screen bg-lawbandit-dark">
+    <div className="flex h-screen bg-app-dark">
       {/* Sidebar */}
       <Sidebar currentPage={currentPage} onPageChange={onPageChange} />
       
@@ -39,7 +39,7 @@ const Layout: React.FC<LayoutProps> = ({ children, currentPage, onPageChange }) 
         <Header title={getPageTitle(currentPage)} />
         
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto bg-lawbandit-dark">
+        <main className="flex-1 overflow-y-auto bg-app-dark">
           <div className="p-6">
             {children}
           </div>
