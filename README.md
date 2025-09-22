@@ -1,4 +1,4 @@
-# LawBandit Calendar
+# Syllabus to Calendar
 
 **Live Application:** [https://syllabus-to-calendar-kappa.vercel.app](https://syllabus-to-calendar-kappa.vercel.app)
 
